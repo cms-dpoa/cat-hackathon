@@ -1,13 +1,72 @@
-name: learn-github-actions
-run-name: ${{ github.actor }} is learning GitHub Actions
-on: [push]
+name: Directory as shared area
+on: 
+  push:
+  workflow_dispatch:
+    inputs:
+      recid:
+        description: 'Record ID'
+        required: false
+        default: '24103' 
+        type: string
 jobs:
-  check-bats-version:
+  test-dir:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '14'
-      - run: npm install -g bats
-      - run: bats -v
+
+      - name: Create dir
+        run: |
+          mkdir mydata
+# I have not found out how to pass the volume with steps with "uses:" 
+# "volumes: mydata:/code" has no effect (and is invalid)
+# Going back to brute force "docker run"...
+# See how to get a global default for "push" action, here hard-coded to 24103 as input is not available for push
+      - name: Get the full metadata 
+        run: |
+          pwd
+          ls -l
+          [ -z ${{ inputs.recid }} ] && this_recid=24103 || this_recid=${{ inputs.recid }}
+          docker run --rm cernopendata/cernopendata-client:0.3.0 get-metadata --recid $this_recid > mydata/metadata.json
+          docker run --rm cernopendata/cernopendata-client:0.3.0 get-file-locations --recid $this_recid --protocol xrootd> mydata/file-locations.json
+# Step for apply foreseen updates to the existing metadata, values are placeholders
+      - name: Merge updates from the local json 
+        run: |
+          jq -s add update.json mydata/metadata.json > mydata/merged.json
+# Github runners have python so OK for now. This could be done in a python container.
+      - name: Read parameters from metadata
+        run: |
+          python read_metadata.py mydata/merged.json > mydata/vars
+          vars=$(cat mydata/vars)
+          for var in $vars; do echo export $var; done > mydata/vars.sh
+          for var in $vars; do echo $var >> $GITHUB_ENV; done
+          echo ${{ env.TYPE }} # not set here yet, only in the next step!
+# This is conditional, only if TYPE=Collision, or if VALI_RECID exists
+      - name: Download a the validated runs file
+        if: env.TYPE == 'Collision'
+        run: |
+          pwd
+          # in plain bash, following 4 lines
+          # cat mydata/vars.sh
+          # source mydata/vars.sh
+          # echo $VALI_RECID
+          # [ ! -z $VALI_RECID ] && docker run --rm -v $PWD/mydata:/code -u root cernopendata/cernopendata-client:0.3.0 download-files --recid $VALI_RECID --protocol xrootd || echo "Skip for MC"
+          # in github workflow, using variable in $GITHUB_ENV, i.e. env.VAR
+          echo ${{ env.VALI_RECID }}
+          docker run --rm -v $PWD/mydata:/code -u root cernopendata/cernopendata-client:0.3.0 download-files --recid ${{ env.VALI_RECID }} --protocol xrootd
+# Prepare the CMSSW configuration file
+      - name: Prepare the configuration
+        run: |
+          echo ${{ env.TYPE }}
+# Run the job
+      - name: Run the POET job
+        run: |
+          echo ${{ env.IMAGE }}
+      - name: Compute cross-section
+        if: env.TYPE == 'Simulated'
+        run: |
+          # run x-sec analyzer
+          
+      - name: List data
+        run: | 
+          pwd
+          ls -l mydata
