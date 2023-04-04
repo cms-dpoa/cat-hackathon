@@ -18,14 +18,15 @@ cd cat-hackathon
 Start the docker container:
 
 ```
-docker run -it --rm -v $PWD:/workdir coffeateam/coffea-base bash
+docker run -it --rm -v $PWD:/workdir rootproject/root bash
 ```
 
 In the container prompt:
 
 ```
-cd /workdir/analysis/rdataframe
+cd ../workdir/analysis/rdataframe
 python rdf_plot.py
+exit
 ```
 
 ## Input
