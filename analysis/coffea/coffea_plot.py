@@ -27,6 +27,7 @@ with open('PF_n.txt', 'w') as filehandle:
 import matplotlib.pyplot as plt
 
 fig, ax = plt.subplots()
+ax.set_yscale('log')
 ax.hist(ak.flatten(events.PFCands.pt), bins=200)
 ax.set_title('PF candidate p_t')
 
