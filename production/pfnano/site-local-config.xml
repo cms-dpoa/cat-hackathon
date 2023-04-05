@@ -1,0 +1,27 @@
+<site-local-config>
+ <site name="T3_CH_PublicCloud">
+    <event-data>
+      <catalog url="trivialcatalog_file:/cvmfs/cms.cern.ch/SITECONF/local/PhEDEx/storage.xml?protocol=xrootd"/>
+    </event-data>
+    <source-config>
+      <statistics-destination name="cms-udpmon-collector.cern.ch:9331"/>
+    </source-config>
+    <local-stage-out>
+      <command value="xrdcp"/>
+      <option value="-p"/>
+      <catalog url="trivialcatalog_file:/cvmfs/cms.cern.ch/SITECONF/T1_US_FNAL_Disk/PhEDEx/storage.xml?protocol=writexrd"/>
+      <phedex-node value="T1_US_FNAL_Disk"/>
+    </local-stage-out>
+    <calib-data>
+    <frontier-connect>
+      <proxyconfig url="http://lhchomeproxy.cern.ch/wpad.dat"/>
+      <proxyconfig url="http://lhchomeproxy.fnal.gov/wpad.dat"/>
+      <server url="http://cms-frontier.openhtc.io:8080/FrontierInt"/>
+      <server url="http://cms1-frontier.openhtc.io:8080/FrontierInt"/>
+      <server url="http://cms2-frontier.openhtc.io:8080/FrontierInt"/>
+      <server url="http://cms3-frontier.openhtc.io:8080/FrontierInt"/>
+      <server url="http://cms4-frontier.openhtc.io:8080/FrontierInt"/>
+     </frontier-connect>
+    </calib-data>
+ </site>
+ </site-local-config>
