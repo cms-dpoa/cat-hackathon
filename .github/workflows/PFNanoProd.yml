@@ -35,7 +35,7 @@ jobs:
 
     - name: Run production
       run: |
-        docker run -v $(pwd):/mnt/vol -v /cvmfs:/cvmfs:shared -w /home/cmsusr gitlab-registry.cern.ch/cms-cloud/cmssw-docker/cc7-cvmfs:2023-04-04-131be08c /bin/bash /mnt/vol/production/pfnano/pf_production.sh github
+        docker run -v $(pwd):/mnt/vol -v /cvmfs:/cvmfs:shared -w /home/cmsusr gitlab-registry.cern.ch/cms-cloud/cmssw-docker/cc7-cms:2023-04-04-131be08c /bin/bash /mnt/vol/production/pfnano/pf_production.sh github
         echo ls -l  `ls -l `
         cp *.root outputs
     

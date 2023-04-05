@@ -12,7 +12,6 @@ set -e
 # then
    sudo chown $USER /mnt/vol
    ls -l /mnt/vol
-   sudo cp /mnt/vol/production/pfnano/site-local-config.xml /cvmfs/cms.cern.ch/SITECONF/local/JobConfig/
 #   cp -r /mnt/vol cat-hackathon
 # fi
 
