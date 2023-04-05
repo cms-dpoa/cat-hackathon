@@ -1,8 +1,6 @@
-name: TEST
-
+name: RDataFrame Test
 on:
   push:
-  
 jobs:
   workflow-analysis:
     runs-on: ubuntu-latest
@@ -24,4 +22,3 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Analysis Results
-          path: mydata/
