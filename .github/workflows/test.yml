@@ -1,15 +1,42 @@
 name: TEST
+
 on:
   push:
+  
 jobs:
-  workflow-command-job:
+  workflow-analysis:
     runs-on: ubuntu-latest
     steps:
-      - name: Disable workflow commands
+      - uses: actions/checkout@v3
+
+      - name: Create dir
         run: |
-          echo '::warning:: This is a warning message, to demonstrate that commands are being processed.'
-          stopMarker=$(uuidgen)
-          echo "::stop-commands::$stopMarker"
-          echo '::warning:: This will NOT be rendered as a warning, because stop-commands has been invoked.'
-          echo "::$stopMarker::"
-          echo '::warning:: This is a warning again, because stop-commands has been turned off.'
+          mkdir mydata
+          ls
+          
+      - name: Download Coffea-Base image
+        run: docker pull coffeateam/coffea-base
+        
+      - name: Run Coffea-Base container
+        run: docker run --rm -v $PWD:/code coffeateam/coffea-base bash -c 'echo "Hello, world!"'
+        
+      - name: Get the full metadata 
+        run: |
+          git clone git@github.com:cms-dpoa/cat-hackathon.git
+          pwd
+          ls -l
+
+      - name: Run analysis
+        run: |
+          cd cat-hackathon/analysis/coffea/
+          python coffea_plot.py
+
+      - name: Save results
+        run: |
+          echo "save results"
+
+      - name: Upload results
+        uses: actions/upload-artifact@v3
+        with:
+          name: Analysis Results
+          path: results/
