@@ -1,4 +1,4 @@
-name: RDataFrame Test
+name: Combined Test
 on:
   push:
 jobs:
@@ -11,16 +11,21 @@ jobs:
         run: |
           mkdir mydata
           ls
-          
+         
+      - name: Download Coffea-Base image
+        run: docker pull coffeateam/coffea-base
+        
+      - name: Run Coffea-Base container
+        run: docker run --rm -v $PWD:/code coffeateam/coffea-base bash -c 'cd code/analysis/coffea/ && python coffea_plot.py && ls && mv *.png ../../mydata/ && ls'
+
       - name: Download ROOT-Base image
         run: docker pull rootproject/root
-        
+
       - name: Run ROOT-Base container
-        run: docker run --rm -v $PWD:/code rootproject/root bash -c 'cd ../code/analysis/rdataframe/ && python rdf_plot.py && ls && mv *.png ../../mydata/'
+        run: docker run --rm -v $PWD:/code rootproject/root bash -c 'cd ../code/analysis/coffea/ && python coffea_plot.py && ls && mv *.png ../../mydata/ && ls'
 
       - name: Upload results
         uses: actions/upload-artifact@v3
         with:
           name: Analysis Results
           path: mydata/
-          
