@@ -12,7 +12,8 @@ set -e
 # then
    sudo chown $USER /mnt/vol
    ls -l /mnt/vol
-   export SITECONFIG_PATH=/mnt/vol/production/pfnano/site-local-config.xml
+   echo $SITECONFIG_PATH
+   export SITECONFIG_PATH=/mnt/vol/production/pfnano
 #   cp -r /mnt/vol cat-hackathon
 # fi
 
@@ -28,7 +29,9 @@ git config user.name "me"
 git cms-merge-topic 39040
 git clone -b opendata https://github.com/DAZSLE/PFNano.git PhysicsTools/PFNano
 scram b -j 4
-export SITECONFIG_PATH=/mnt/vol/production/pfnano/
+echo $SITECONFIG_PATH
+export SITECONFIG_PATH=/mnt/vol/production/pfnano
+echo $SITECONFIG_PATH
 
 cmsDriver.py --python_filename doubleeg_cfg.py --eventcontent NANOAOD --datatier NANOAOD \
   --fileout file:doubleeg_nanoaod.root --conditions 106X_dataRun2_v36 --step NANO \
