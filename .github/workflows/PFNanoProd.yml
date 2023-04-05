@@ -1,0 +1,42 @@
+name: PFNano Production Analysis
+
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      recid:
+        description: 'Record ID'
+        required: false
+        default: '24103' 
+        type: string
+jobs:
+  analysis:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v1
+    
+    - name: Set up Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8 # Change this to the desired Python version
+    
+    - name: Install dependencies
+      run: pip install awkward1 coffea matplotlib
+    
+    - name: Run analysis
+      run: |
+        python analysis.py
+    
+    - name: Save results
+      run: |
+        mkdir results
+        mv PF_n.txt results/
+        mv PF_pt.png results/
+        mv PF_n.png results/
+    
+    - name: Upload results
+      uses: actions/upload-artifact@v2
+      with:
+        name: Analysis Results
+        path: results/
