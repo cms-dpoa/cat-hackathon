@@ -18,7 +18,7 @@ jobs:
         run: docker pull coffeateam/coffea-base
         
       - name: Run Coffea-Base container
-        run: docker run --rm -v $PWD:/code coffeateam/coffea-base bash -c 'ls && cd code && ls && python analysis/coffea/coffea_plot.py'
+        run: docker run --rm -v $PWD:/code coffeateam/coffea-base bash -c 'cd code/analysis/coffea && ls && python coffea_plot.py'
 
       - name: Save results
         run: |
