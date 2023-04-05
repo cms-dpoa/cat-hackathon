@@ -18,18 +18,7 @@ jobs:
         run: docker pull coffeateam/coffea-base
         
       - name: Run Coffea-Base container
-        run: docker run --rm -v $PWD:/code coffeateam/coffea-base bash -c 'echo "Hello, world!"'
-        
-      - name: Get the full metadata 
-        run: |
-          git clone git@github.com:cms-dpoa/cat-hackathon.git
-          pwd
-          ls -l
-
-      - name: Run analysis
-        run: |
-          cd cat-hackathon/analysis/coffea/
-          python coffea_plot.py
+        run: docker run --rm -v $PWD:/code coffeateam/coffea-base bash -c 'python analysis/coffea/coffea_plot.py'
 
       - name: Save results
         run: |
