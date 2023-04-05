@@ -9,20 +9,19 @@ jobs:
 
       - name: Create dir
         run: |
-          mkdir mydata
-          ls
+          mkdir -p mydata/coffea mydata/rdf
          
       - name: Download Coffea-Base image
         run: docker pull coffeateam/coffea-base
         
       - name: Run Coffea-Base container
-        run: docker run --rm -v $PWD:/code coffeateam/coffea-base bash -c 'cd code/analysis/coffea/ && python coffea_plot.py && ls && mv *.png ../../mydata/ && ls'
+        run: docker run --rm -v $PWD:/code coffeateam/coffea-base bash -c 'cd code/analysis/coffea/ && python coffea_plot.py && mv *.png ../../mydata/coffea/ && mv PF_n.txt ../../mydata/coffea/ && ls'
 
       - name: Download ROOT-Base image
         run: docker pull rootproject/root
 
       - name: Run ROOT-Base container
-        run: docker run --rm -v $PWD:/code rootproject/root bash -c 'cd ../code/analysis/coffea/ && python coffea_plot.py && ls && mv *.png ../../mydata/ && ls'
+        run: docker run --rm -v $PWD:/code rootproject/root bash -c 'cd ../code/analysis/coffea/ && python coffea_plot.py && mv *.png ../../mydata/rdf/ && ls'
 
       - name: Upload results
         uses: actions/upload-artifact@v3
