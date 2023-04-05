@@ -33,6 +33,8 @@ cmsDriver.py --python_filename doubleeg_cfg.py --eventcontent NANOAOD --datatier
   --filein $inputfile --era Run2_25ns,run2_nanoAOD_106X2015 --no_exec --data -n $nevents \
   --customise PhysicsTools/PFNano/pfnano_cff.PFnano_customizeData_onlyPF
 
+cmsRun doubleeg_cfg.py
+
 # if [ $runas = github ]
 # then
    cp *.root /mnt/vol/
