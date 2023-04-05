@@ -18,14 +18,11 @@ jobs:
         run: docker pull coffeateam/coffea-base
         
       - name: Run Coffea-Base container
-        run: docker run --rm -v $PWD:/code coffeateam/coffea-base bash -c 'cd code/analysis/coffea && ls && python coffea_plot.py'
+        run: docker run --rm -v $PWD:/code coffeateam/coffea-base bash -c 'cd code && python analysis/coffea/coffea_plot.py && mv analysis/coffea/*.png mydata/'
 
-      - name: Save results
-        run: |
-          echo "save results"
 
       - name: Upload results
         uses: actions/upload-artifact@v3
         with:
           name: Analysis Results
-          path: results/
+          path: mydata/
