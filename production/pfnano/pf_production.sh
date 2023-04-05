@@ -12,6 +12,7 @@ set -e
 # then
    sudo chown $USER /mnt/vol
    ls -l /mnt/vol
+   export SITECONFIG_PATH=/mnt/vol/production/pfnano/site-local-config.xml
 #   cp -r /mnt/vol cat-hackathon
 # fi
 
