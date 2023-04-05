@@ -11,29 +11,22 @@ on:
         type: string
 jobs:
   analysis:
-    runs-on: ubuntu-latest
+    runs-on: coffeateam/coffea-base
     steps:
     - name: Checkout code
       uses: actions/checkout@v1
     
-    - name: Set up Python
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.8 # Change this to the desired Python version
-    
     - name: Install dependencies
-      run: pip install awkward1 coffea matplotlib
+      run: git clone git@github.com:cms-dpoa/cat-hackathon.git
     
     - name: Run analysis
       run: |
-        python analysis.py
+        cd cat-hackathon/analysis/coffea/
+        python coffea_plot.py
     
     - name: Save results
       run: |
-        mkdir results
-        mv PF_n.txt results/
-        mv PF_pt.png results/
-        mv PF_n.png results/
+        echo "save results"
     
     - name: Upload results
       uses: actions/upload-artifact@v2
