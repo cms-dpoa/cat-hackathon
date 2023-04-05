@@ -21,7 +21,7 @@ jobs:
         run: docker pull rootproject/root
 
       - name: Run ROOT-Base container
-        run: docker run --rm -v $PWD:/code rootproject/root bash -c 'cd ../code/analysis/coffea/ && python coffea_plot.py && mv *.png ../../mydata/rdf/ && ls'
+        run: docker run --rm -v $PWD:/code rootproject/root bash -c 'cd ../code/analysis/rdataframe/ && python rdf_plot.py && mv *.png ../../mydata/rdf/ && ls'
 
       - name: Upload results
         uses: actions/upload-artifact@v3
