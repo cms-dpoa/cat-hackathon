@@ -12,11 +12,11 @@ jobs:
           mkdir mydata
           ls
           
-      - name: Download Coffea-Base image
-        run: docker pull coffeateam/coffea-base
+      - name: Download ROOT-Base image
+        run: docker pull rootproject/root
         
-      - name: Run Coffea-Base container
-        run: docker run --rm -v $PWD:/code coffeateam/coffea-base bash -c 'cd code/analysis/coffea/ && python coffea_plot.py && ls && mv *.png ../../mydata/'
+      - name: Run ROOT-Base container
+        run: docker run --rm -v $PWD:/code rootproject/root bash -c 'cd ../code/analysis/coffea/ && python coffea_plot.py && ls && mv *.png ../../mydata/'
 
       - name: Upload results
         uses: actions/upload-artifact@v3
