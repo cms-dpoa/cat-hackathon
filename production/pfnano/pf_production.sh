@@ -17,6 +17,7 @@ set -e
 
 # Expect to be in /code
 source /cvmfs/cms.cern.ch/cmsset_default.sh
+export SCRAM_ARCH=slc7_amd64_gcc700
 cmsrel CMSSW_10_6_30
 cd CMSSW_10_6_30/src/
 cmsenv
