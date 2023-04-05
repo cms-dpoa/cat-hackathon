@@ -1,4 +1,4 @@
-name: PFNano Production Analysis
+name: PFNano production test
 
 on:
   push:
@@ -10,26 +10,35 @@ on:
         default: '24103' 
         type: string
 jobs:
-  analysis:
-    runs-on: coffeateam/coffea-base
+  test-production:
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v1
+      uses: actions/checkout@v3
     
-    - name: Install dependencies
-      run: git clone git@github.com:cms-dpoa/cat-hackathon.git
-    
-    - name: Run analysis
+    - name: Prepare directories
       run: |
-        cd cat-hackathon/analysis/coffea/
-        python coffea_plot.py
-    
-    - name: Save results
+        mkdir outputs
+        echo ls -l  `ls -l `
+
+    - name: Mount cvmfs
+      uses: cvmfs-contrib/github-action-cvmfs@v2
       run: |
-        echo "save results"
+        echo "### Dump default.local ###"
+        cat /etc/cvmfs/default.local
+        echo "### Test /cvmfs/cms.cern.ch ###"
+        ls /cvmfs/cms.cern.ch
+        echo "### /cvmfs/cms-opendata-conddb.cern.ch/ ###"
+        ls /cvmfs/cms-opendata-conddb.cern.ch/
+
+    - name: Run production
+      run: |
+        docker run -v $(pwd):/mnt/vol -v /cvmfs:/cvmfs:shared -w /home/cmsusr gitlab-registry.cern.ch/cms-cloud/cmssw-docker/cc7-cvmfs:2023-04-04-131be08c /bin/bash /mnt/vol/production/pfnano/pf_production.sh github
+        echo ls -l  `ls -l `
+        cp *.root outputs
     
     - name: Upload results
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
-        name: Analysis Results
-        path: results/
+        name: output
+        path: outputs/
