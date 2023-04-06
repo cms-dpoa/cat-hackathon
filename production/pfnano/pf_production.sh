@@ -18,11 +18,11 @@ set -e
 # fi
 
 # Expect to be in /code
-source /cvmfs/cms.cern.ch/cmsset_default.sh
-export SCRAM_ARCH=slc7_amd64_gcc700
-cmsrel CMSSW_10_6_30
-cd CMSSW_10_6_30/src/
-cmsenv
+# source /cvmfs/cms.cern.ch/cmsset_default.sh
+# export SCRAM_ARCH=slc7_amd64_gcc700
+# cmsrel CMSSW_10_6_30
+# cd CMSSW_10_6_30/src/
+# cmsenv
 git cms-init --upstream-only
 git config user.email "me@me.com"
 git config user.name "me"
