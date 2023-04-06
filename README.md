@@ -33,7 +33,9 @@ Develop the code in the respective subdirectories
 - `analysis/coffea`
 - `production/pfnano`
 
-Make your code development (including the documentation of the `README.md` file in the directory!), create a development branch (start the branch name with your name) and push your branch to the repository, and make a pull request in the GitHub web interface. Use `analysis-rdf:`, `analysis-coffea:` or `production-pfnano` in your commit messages.
+For each new feature or fix, open an issue and - if it is something you plan to do - assign it to yourself. No push or pull request without an existing issue!
+
+For your code development, create a development branch (start the branch name with your name and add a descriptive word for the feature). Use preferrably one brach per feature. When done, push your branch to the repository, use `analysis-rdf:`, `analysis-coffea:` or `production-pfnano` etc in your commit messages. 
 
 ```
 git checkout -b <yourname-branchname>
@@ -41,6 +43,8 @@ git add <files to be added>
 git commit -m "dir-subdir: short description"
 git push origin <yourname-branchname>
 ```
+
+Then, make a pull request in the GitHub web interface. In the pull request title or text, add "closes #N" with the number of issue, and the issue will be closed automatically at merge. For trivial changes, merge the PR yourself, if there's something you would like to discuss, request a review.
 
 Once your new code is pushed and merged to the main branch, for the next developments, remember to start your next development branch from the `main` branch and pull the updates to your local area.
 

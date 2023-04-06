@@ -1,3 +1,4 @@
 *.log
+*.png
 node_modules/
 analysis/rdataframe/PFCands_plotter.ipynb
