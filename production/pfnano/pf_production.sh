@@ -23,7 +23,7 @@ set -e
 # cmsrel CMSSW_10_6_30
 # cd CMSSW_10_6_30/src/
 # cmsenv
-git cms-init --upstream-only
+git cms-init --upstream-only -y
 git config user.email "me@me.com"
 git config user.name "me"
 git cms-merge-topic 39040
