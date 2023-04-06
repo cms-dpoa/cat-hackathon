@@ -12,32 +12,23 @@ set -e
 # then
    sudo chown $USER /mnt/vol
    ls -l /mnt/vol
-   echo At the start SITECONFIG_PATH: $SITECONFIG_PATH
-   export SITECONFIG_PATH=/mnt/vol/production/pfnano
+   #echo At the start SITECONFIG_PATH: $SITECONFIG_PATH
+   #export SITECONFIG_PATH=/mnt/vol/production/pfnano
 #   cp -r /mnt/vol cat-hackathon
 # fi
 
 # Expect to be in /code
-export SITECONFIG_PATH=/mnt/vol/production/pfnano
-echo Before source: SITECONFIG_PATH: $SITECONFIG_PATH
 source /cvmfs/cms.cern.ch/cmsset_default.sh
-echo After source: SITECONFIG_PATH: $SITECONFIG_PATH
 export SCRAM_ARCH=slc7_amd64_gcc700
 cmsrel CMSSW_10_6_30
 cd CMSSW_10_6_30/src/
-echo Before cmsenv SITECONFIG_PATH: $SITECONFIG_PATH
-export SITECONFIG_PATH=/mnt/vol/production/pfnano
-echo Before cmsenv: SITECONFIG_PATH: $SITECONFIG_PATH
 cmsenv
-echo After cmsenv SITECONFIG_PATH: $SITECONFIG_PATH
 git cms-init --upstream-only
 git config user.email "me@me.com"
 git config user.name "me"
 git cms-merge-topic 39040
 git clone -b opendata https://github.com/DAZSLE/PFNano.git PhysicsTools/PFNano
 scram b -j 4
-export SITECONFIG_PATH=/mnt/vol/production/pfnano
-echo Before cmdDriver SITECONFIG_PATH: $SITECONFIG_PATH
 
 cmsDriver.py --python_filename doubleeg_cfg.py --eventcontent NANOAOD --datatier NANOAOD \
   --fileout file:doubleeg_nanoaod.root --conditions 106X_dataRun2_v36 --step NANO \

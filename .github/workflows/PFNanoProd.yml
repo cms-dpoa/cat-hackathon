@@ -13,6 +13,13 @@ jobs:
   test-production:
     runs-on: ubuntu-latest
     steps:
+    - name: Free some disk space
+      uses: AdityaGarg8/remove-unwanted-software@v1
+      with:
+        remove-android: 'true'
+        remove-dotnet: 'true'
+        remove-haskell: 'true'
+
     - name: Checkout code
       uses: actions/checkout@v3
     
@@ -21,21 +28,21 @@ jobs:
         mkdir outputs
         echo ls -l  `ls -l `
 
-    - name: Mount cvmfs
-      uses: cvmfs-contrib/github-action-cvmfs@v2
+    # - name: Mount cvmfs
+    #  uses: cvmfs-contrib/github-action-cvmfs@v2
 
-    - name: Test cvmfs
-      run: |
-        echo "### Dump default.local ###"
-        cat /etc/cvmfs/default.local
-        echo "### Test /cvmfs/cms.cern.ch ###"
-        ls /cvmfs/cms.cern.ch
-        echo "### /cvmfs/cms-opendata-conddb.cern.ch/ ###"
-        ls /cvmfs/cms-opendata-conddb.cern.ch/
+    # - name: Test cvmfs
+    #  run: |
+    #    echo "### Dump default.local ###"
+    #    cat /etc/cvmfs/default.local
+    #    echo "### Test /cvmfs/cms.cern.ch ###"
+    #    ls /cvmfs/cms.cern.ch
+    #    echo "### /cvmfs/cms-opendata-conddb.cern.ch/ ###"
+    #    ls /cvmfs/cms-opendata-conddb.cern.ch/
 
     - name: Run production
       run: |
-        docker run -v $(pwd):/mnt/vol -v /cvmfs:/cvmfs:shared -w /home/cmsusr gitlab-registry.cern.ch/cms-cloud/cmssw-docker/cc7-cms:2023-04-04-131be08c /bin/bash /mnt/vol/production/pfnano/pf_production.sh github
+        docker run -v $(pwd):/mnt/vol -v /cvmfs:/cvmfs:shared -w /home/cmsusr gitlab-registry.cern.ch/cms-cloud/cmssw-docker/cmssw_10_6_30-slc7_amd64_gcc700 /bin/bash /mnt/vol/production/pfnano/pf_production.sh github
         echo ls -l  `ls -l `
         cp *.root outputs
     
