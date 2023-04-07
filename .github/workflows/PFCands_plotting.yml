@@ -10,6 +10,9 @@ jobs:
       - name: Create dir
         run: |
           mkdir -p mydata/coffea mydata/rdf
+          
+      - name: Dummy step for production
+        run: echo This will be the PFNanoAOD production step in a CMSSW docker container
 
       - name: Download Coffea-Base image
         run: docker pull coffeateam/coffea-base
@@ -22,9 +25,6 @@ jobs:
 
       - name: Run ROOT-Base container
         run: docker run --rm -v $PWD:/code rootproject/root bash -c 'cd ../code/analysis/rdataframe/ && python rdf_plot.py && mv *.png ../../mydata/rdf/ && ls'
-
-      - name: Dummy step for production
-        run: echo This will be the PFNanoAOD production step in a CMSSW docker container
 
       - name: Upload results
         uses: actions/upload-artifact@v3
