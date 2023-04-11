@@ -1,16 +1,11 @@
-# coding: utf-8
-
 """
 Simple test tasks.
 """
 
 import law
-
 from dpoa.tasks.base import Task
 
-
 class NanoProducer(Task):
-
     sandbox = "docker::rootproject/root:latest"
 
     def output(self):
@@ -19,9 +14,7 @@ class NanoProducer(Task):
     def run(self):
         self.output().touch()
 
-
 class CreatePlots(Task):
-
     sandbox = "docker::riga/py-sci"
 
     def requires(self):

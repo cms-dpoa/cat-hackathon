@@ -27,7 +27,7 @@ law index --verbose
 
 You should see:
 
-```shell
+```output
 indexing tasks in 1 module(s)
 loading module 'dpoa.tasks', done
 
@@ -47,7 +47,7 @@ law run CreatePlots --print-status -1
 
 No tasks ran so far, so no output target should exist yet. You will see this output:
 
-```shell
+```output
 print task status with max_depth -1 and target_depth 0
 
 0 > CreatePlots()
@@ -69,22 +69,19 @@ law run CreatePlots
 
 This should take only a few seconds to process.
 
-```shell
-INFO: luigi-interface - Informed scheduler that task   NanoProducer__99914b932b   has status   FAILED
-INFO: luigi-interface - Worker Worker(salt=2937975090, workers=1, host=Alexs-MacBook-Pro.local, username=alextintin, pid=2688) was stopped. Shutting down Keep-Alive thread
-INFO: luigi-interface -
+```output
 ===== Luigi Execution Summary =====
 
 Scheduled 2 tasks of which:
-* 1 failed:
+* 1 complete ones were encountered:
     - 1 NanoProducer(...)
-* 1 were left pending, among these:
-    * 1 had failed dependencies:
-        - 1 CreatePlots(...)
+* 1 ran successfully:
+    - 1 CreatePlots(...)
 
-This progress looks :( because there were failed tasks
+This progress looks :) because there were no failed tasks or missing dependencies
 
 ===== Luigi Execution Summary =====
+
 ```
 
 By default, this example uses a local scheduler, which - by definition - offers no visualization tools in the browser. If you want to see how the task tree is built and subsequently run ``luigid`` in a second terminal. This will start a central scheduler at [localhost:8082](localhost:8082) (the default address). To inform tasks (or rather *workers*) about the scheduler, either add ``--local-scheduler False`` to the ``law run`` command as such:
@@ -107,16 +104,16 @@ law run CreatePlots --print-status 1
 
 When step 2 succeeded, all output targets should exist:
 
-```shell
+```output
 print task status with max_depth 1 and target_depth 0
 
 0 > CreatePlots()
 │     LocalFileTarget(fs=local_fs, path=$DPOA_STORE_DIR/CreatePlots/some_nice_plot.png)
-│       absent
+│       existent
 │
 └──1 > NanoProducer()
          LocalFileTarget(fs=local_fs, path=$DPOA_STORE_DIR/NanoProducer/some_fake_file.root)
-           absent
+           existent
 ```
 
 To see the status of the targets in the collection, i.e., the grouped outputs of the branch tasks,
@@ -125,8 +122,19 @@ set the target depth via `--print-status 1,1`.
 #### 5. Look at the results
 
 ```shell
-cd data
-ls
+cd data/store
+```
+
+You will have created the following tree in your directory:
+
+```output
+store
+├── CreatePlots
+│   └── some_nice_plot.png
+└── NanoProducer
+    └── some_fake_file.root
+
+3 directories, 2 files
 ```
 
 #### 6. Cleanup the results
@@ -140,7 +148,7 @@ You should see:
 ```shell
 remove task output with max_depth -1
 removal mode? [i*(interactive), d(dry), a(all)] a
-selected all mode mode
+selected all mode
 
 0 > CreatePlots()
 │     LocalFileTarget(fs=local_fs, path=$DPOA_STORE_DIR/CreatePlots/some_nice_plot.png)
@@ -150,4 +158,3 @@ selected all mode mode
          LocalFileTarget(fs=local_fs, path=$DPOA_STORE_DIR/NanoProducer/some_fake_file.root)
            removed
 ```
-

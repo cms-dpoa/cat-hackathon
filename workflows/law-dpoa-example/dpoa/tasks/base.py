@@ -1,19 +1,15 @@
 # coding: utf-8
-
 """
 Base tasks.
 """
 
 import os
-
 import law
 
 # load contrib packages
 law.contrib.load("docker")
 
-
 class Task(law.SandboxTask):
-
     def local_path(self, *path):
         # DPOA_STORE_DIR is defined in setup.sh
         parts = ("$DPOA_STORE_DIR", self.task_family) + path
