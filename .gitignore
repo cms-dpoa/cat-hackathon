@@ -4,3 +4,7 @@ node_modules/
 analysis/rdataframe/PFCands_plotter.ipynb
 workflows/.DS_Store
 workflows/law-dpoa-example/.DS_Store
+workflows/law-dpoa-example/.law
+workflows/law-dpoa-example/data
+workflows/law-dpoa-example/dpoa/__pycache__
+workflows/law-dpoa-example/dpoa/tasks/__pycache__
