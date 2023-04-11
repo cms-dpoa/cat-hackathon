@@ -135,7 +135,7 @@ ls
 law run CreatePlots --remove-output -1
 ```
 
-You should 
+You should see:
 
 ```shell
 remove task output with max_depth -1

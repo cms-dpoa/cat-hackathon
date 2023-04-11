@@ -36,7 +36,7 @@ Develop the code in the respective subdirectories
 
 For each new feature or fix, open an issue and - if it is something you plan to do - assign it to yourself. No push or pull request without an existing issue!
 
-For your code development, create a development branch (start the branch name with your name and add a descriptive word for the feature). Use preferrably one brach per feature. When done, push your branch to the repository, use `analysis-rdf:`, `analysis-coffea:`, `production-pfnano` or `workflows/law-dpoa-example` in your commit messages. 
+For your code development, create a development branch (start the branch name with your name and add a descriptive word for the feature). Use preferrably one brach per feature. When done, push your branch to the repository, use `analysis-rdf:`, `analysis-coffea:`, `production-pfnano` or `workflows-law-dpoa-example` in your commit messages. 
 
 ```
 git checkout -b <yourname-branchname>
