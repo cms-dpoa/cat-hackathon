@@ -25,6 +25,7 @@ class NanoProducer(Task):
         if p != 0:
             raise Exception("command failed")
 
+
 class CreatePlots(Task):
     sandbox = "docker::riga/py-sci"
 

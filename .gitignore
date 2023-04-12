@@ -8,3 +8,13 @@ workflows/law-dpoa-example/.law
 workflows/law-dpoa-example/data
 workflows/law-dpoa-example/dpoa/__pycache__
 workflows/law-dpoa-example/dpoa/tasks/__pycache__
+workflows/law-dpoa-example/.law
+workflows/law-dpoa-example/data
+workflows/law-dpoa-example/.DS_Store
+workflows/PFCands_plotting/.law
+workflows/PFCands_plotting/data
+workflows/PFCands_plotting/dpoa/__pycache__
+workflows/PFCands_plotting/dpoa/tasks/__pycache__
+workflows/PFCands_plotting/.DS_Store
+workflows/PFCands_plotting/dpoa/.DS_Store
+workflows/law-dpoa-example/dpoa/.DS_Store
