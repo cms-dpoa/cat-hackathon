@@ -30,7 +30,7 @@ set -e
 # git clone -b opendata https://github.com/DAZSLE/PFNano.git PhysicsTools/PFNano
 # scram b -j 4
 
-cp /mnt/vol/data/doubleeg_nanoaod_eg.root output.root
+# cp /mnt/vol/data/doubleeg_nanoaod_eg.root output.root
 
 # cmsDriver.py --python_filename doubleeg_cfg.py --eventcontent NANOAOD --datatier NANOAOD \
 #   --fileout file:doubleeg_nanoaod.root --conditions 106X_dataRun2_v36 --step NANO \
