@@ -12,8 +12,12 @@ set -e
 # then
    sudo chown $USER /mnt/vol
    echo mount volume
-   cp /mnt/vol/data/doubleeg_nanoaod_eg.root outputs/output.root
-   ls outputs/
+   cp /mnt/vol/data/doubleeg_nanoaod_eg.root output.root
+   ls /mnt/vol
+   cp output.root /mnt/vol/outputs/
+   echo move
+   ls /mnt/vol
+   
    #echo At the start SITECONFIG_PATH: $SITECONFIG_PATH
    #export SITECONFIG_PATH=/mnt/vol/production/pfnano
 #   cp -r /mnt/vol cat-hackathon
