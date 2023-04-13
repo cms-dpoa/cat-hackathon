@@ -29,6 +29,8 @@ set -e
 # git cms-merge-topic 39040
 # git clone -b opendata https://github.com/DAZSLE/PFNano.git PhysicsTools/PFNano
 # scram b -j 4
+pwd
+ls
 
 # cp /mnt/vol/data/doubleeg_nanoaod_eg.root output.root
 
@@ -41,7 +43,7 @@ set -e
 
 # if [ $runas = github ]
 # then
-   cp *.root /mnt/vol/
-   echo ls -l /mnt/vol
-   ls -l /mnt/vol
+   # cp *.root /mnt/vol/
+   # echo ls -l /mnt/vol
+   # ls -l /mnt/vol
 # fi  
