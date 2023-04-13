@@ -12,9 +12,8 @@ set -e
 # then
    sudo chown $USER /mnt/vol
    echo mount volume
-   ls /mnt/vol
-   cp /mnt/vol/data/doubleeg_nanoaod_eg.root output1.root
-   ls
+   cp /mnt/vol/data/doubleeg_nanoaod_eg.root outputs/output.root
+   ls outputs/
    #echo At the start SITECONFIG_PATH: $SITECONFIG_PATH
    #export SITECONFIG_PATH=/mnt/vol/production/pfnano
 #   cp -r /mnt/vol cat-hackathon
@@ -33,10 +32,6 @@ set -e
 # git clone -b opendata https://github.com/DAZSLE/PFNano.git PhysicsTools/PFNano
 # scram b -j 4
 
-echo pwd
-pwd
-cp /data/doubleeg_nanoaod_eg.root output2.root
-ls
 
 # cmsDriver.py --python_filename doubleeg_cfg.py --eventcontent NANOAOD --datatier NANOAOD \
 #   --fileout file:doubleeg_nanoaod.root --conditions 106X_dataRun2_v36 --step NANO \
