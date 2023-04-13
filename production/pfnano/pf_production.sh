@@ -11,6 +11,7 @@ set -e
 # if [ $runas = github ]
 # then
    sudo chown $USER /mnt/vol
+   echo mount volume
    ls -l /mnt/vol
    #echo At the start SITECONFIG_PATH: $SITECONFIG_PATH
    #export SITECONFIG_PATH=/mnt/vol/production/pfnano
@@ -29,6 +30,7 @@ set -e
 # git cms-merge-topic 39040
 # git clone -b opendata https://github.com/DAZSLE/PFNano.git PhysicsTools/PFNano
 # scram b -j 4
+echo pwd
 pwd
 ls
 
