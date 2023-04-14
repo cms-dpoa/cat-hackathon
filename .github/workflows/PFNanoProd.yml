@@ -25,7 +25,7 @@ jobs:
     
     - name: Prepare directories
       run: |
-        mkdir outputs/production
+        mkdir -p outputs/production
         echo ls -l  `ls -l `
 
     - name: Run production
