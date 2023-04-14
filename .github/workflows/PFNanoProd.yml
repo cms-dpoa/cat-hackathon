@@ -27,7 +27,7 @@ jobs:
       run: |
         mkdir outputs
         echo ls -l  `ls -l `
-        echo 'Hello World' > output/hello_world.txt
+        echo 'Hello World' > outputs/hello_world.txt
 
     - name: Run production
       run: |
