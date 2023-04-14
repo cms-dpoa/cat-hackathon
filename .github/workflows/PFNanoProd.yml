@@ -1,50 +1,50 @@
-name: PFNano production test
-on:
-  push:
-  workflow_dispatch:
-    inputs:
-      recid:
-        description: 'Record ID'
-        required: false
-        default: '24103' 
-        type: string
-jobs:
-  workflow-analysis:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Free some disk space
-        uses: AdityaGarg8/remove-unwanted-software@v1
-        with:
-          remove-android: 'true'
-          remove-dotnet: 'true'
-          remove-haskell: 'true'
+# name: PFNano production test
+# on:
+#   push:
+#   workflow_dispatch:
+#     inputs:
+#       recid:
+#         description: 'Record ID'
+#         required: false
+#         default: '24103' 
+#         type: string
+# jobs:
+#   workflow-analysis:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Free some disk space
+#         uses: AdityaGarg8/remove-unwanted-software@v1
+#         with:
+#           remove-android: 'true'
+#           remove-dotnet: 'true'
+#           remove-haskell: 'true'
 
-      - name: Checkout code
-        uses: actions/checkout@v3
+#       - name: Checkout code
+#         uses: actions/checkout@v3
       
-      - name: Prepare directories
-        run: |
-          mkdir -p outputs/coffea outputs/rdf outputs/production
-          echo ls -l  `ls -l `
+#       - name: Prepare directories
+#         run: |
+#           mkdir -p outputs/coffea outputs/rdf outputs/production
+#           echo ls -l  `ls -l `
 
-      - name: Run production
-        run: |
-          docker run -v $(pwd):/mnt/vol -w /home/cmsusr gitlab-registry.cern.ch/cms-cloud/cmssw-docker/cmssw_10_6_30-slc7_amd64_gcc700 /bin/bash /mnt/vol/production/pfnano/pf_production.sh github && cp output.root outputs/production/
+#       - name: Run production
+#         run: |
+#           docker run -v $(pwd):/mnt/vol -w /home/cmsusr gitlab-registry.cern.ch/cms-cloud/cmssw-docker/cmssw_10_6_30-slc7_amd64_gcc700 /bin/bash /mnt/vol/production/pfnano/pf_production.sh github && cp output.root outputs/production/
       
-      - name: Download Coffea-Base image
-        run: docker pull coffeateam/coffea-base
+#       - name: Download Coffea-Base image
+#         run: docker pull coffeateam/coffea-base
         
-      - name: Run Coffea-Base container
-        run: docker run --rm -v $PWD:/code coffeateam/coffea-base bash -c 'cd code/analysis/coffea/ && python coffea_plot.py && mv *.png ../../outputs/coffea/ && mv PF_n.txt ../../outputs/coffea/ && ls'
+#       - name: Run Coffea-Base container
+#         run: docker run --rm -v $PWD:/code coffeateam/coffea-base bash -c 'cd code/analysis/coffea/ && python coffea_plot.py && mv *.png ../../outputs/coffea/ && mv PF_n.txt ../../outputs/coffea/ && ls'
 
-      - name: Download ROOT-Base image
-        run: docker pull rootproject/root
+#       - name: Download ROOT-Base image
+#         run: docker pull rootproject/root
 
-      - name: Run ROOT-Base container
-        run: docker run --rm -v $PWD:/code rootproject/root bash -c 'cd ../code/analysis/rdataframe/ && python rdf_plot.py && mv *.png ../../outputs/rdf/ && ls'
+#       - name: Run ROOT-Base container
+#         run: docker run --rm -v $PWD:/code rootproject/root bash -c 'cd ../code/analysis/rdataframe/ && python rdf_plot.py && mv *.png ../../outputs/rdf/ && ls'
 
-      - name: Upload results
-        uses: actions/upload-artifact@v3
-        with:
-          name: Analysis Results
-          path: outputs/
+#       - name: Upload results
+#         uses: actions/upload-artifact@v3
+#         with:
+#           name: Analysis Results
+#           path: outputs/
