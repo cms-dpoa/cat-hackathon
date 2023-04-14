@@ -13,37 +13,37 @@ set -e
    sudo chown $USER /mnt/vol
    ls -l /mnt/vol
    
-   #echo At the start SITECONFIG_PATH: $SITECONFIG_PATH
-   #export SITECONFIG_PATH=/mnt/vol/production/pfnano
+#    echo At the start SITECONFIG_PATH: $SITECONFIG_PATH
+#    export SITECONFIG_PATH=/mnt/vol/production/pfnano
 #   cp -r /mnt/vol cat-hackathon
 # fi
 
-# # Expect to be in /code
-# source /cvmfs/cms.cern.ch/cmsset_default.sh
-# # export SCRAM_ARCH=slc7_amd64_gcc700
-# # cmsrel CMSSW_10_6_30
-# # cd CMSSW_10_6_30/src/
-# eval `scramv1 runtime -sh`
-# git cms-init --upstream-only -y
-# git config user.email "me@me.com"
-# git config user.name "me"
-# git cms-merge-topic 39040
-# git clone -b opendata https://github.com/DAZSLE/PFNano.git PhysicsTools/PFNano
-# scram b -j 4
+# Expect to be in /code
+source /cvmfs/cms.cern.ch/cmsset_default.sh
+# export SCRAM_ARCH=slc7_amd64_gcc700
+# cmsrel CMSSW_10_6_30
+# cd CMSSW_10_6_30/src/
+eval `scramv1 runtime -sh`
+git cms-init --upstream-only -y
+git config user.email "me@me.com"
+git config user.name "me"
+git cms-merge-topic 39040
+git clone -b opendata https://github.com/DAZSLE/PFNano.git PhysicsTools/PFNano
+scram b -j 4
 
-# cmsDriver.py --python_filename doubleeg_cfg.py --eventcontent NANOAOD --datatier NANOAOD \
-#   --fileout file:doubleeg_nanoaod.root --conditions 106X_dataRun2_v36 --step NANO \
-#   --filein $inputfile --era Run2_25ns,run2_nanoAOD_106X2015 --no_exec --data -n $nevents \
-#   --customise PhysicsTools/PFNano/pfnano_cff.PFnano_customizeData_onlyPF
+cmsDriver.py --python_filename doubleeg_cfg.py --eventcontent NANOAOD --datatier NANOAOD \
+  --fileout file:doubleeg_nanoaod.root --conditions 106X_dataRun2_v36 --step NANO \
+  --filein $inputfile --era Run2_25ns,run2_nanoAOD_106X2015 --no_exec --data -n $nevents \
+  --customise PhysicsTools/PFNano/pfnano_cff.PFnano_customizeData_onlyPF
 
-# cmsRun doubleeg_cfg.py
+cmsRun doubleeg_cfg.py
 
-# # Emulate creating root file
-cp /mnt/vol/data/doubleeg_nanoaod_eg.root /mnt/vol/output.root
+# Emulate creating root file
+# cp /mnt/vol/data/doubleeg_nanoaod_eg.root /mnt/vol/output.root
 
-# if [ $runas = github ]
-# then
-   # cp *.root /mnt/vol/
-   # echo ls -l /mnt/vol
-   # ls -l /mnt/vol
-# fi  
+if [ $runas = github ]
+then
+   cp *.root /mnt/vol/output.root
+   echo ls -l /mnt/vol
+   ls -l /mnt/vol
+fi  
