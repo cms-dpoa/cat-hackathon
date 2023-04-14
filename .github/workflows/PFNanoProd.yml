@@ -34,10 +34,8 @@ jobs:
         docker run -v $(pwd):/mnt/vol -w /home/cmsusr gitlab-registry.cern.ch/cms-cloud/cmssw-docker/cmssw_10_6_30-slc7_amd64_gcc700 /bin/bash /mnt/vol/production/pfnano/pf_production.sh github && echo "Done running pf_production.sh"
         ls
         echo ls 1
-        ls /outputs/
-        cp output.root /outputs/
-        echo ls 2
-        ls /outputs/
+        ls mnt/vol/outputs/
+        cp output.root mnt/vol/outputs/
     
     - name: Upload results
       uses: actions/upload-artifact@v3
