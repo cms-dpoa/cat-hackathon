@@ -25,26 +25,13 @@ jobs:
     
     - name: Prepare directories
       run: |
-        mkdir outputs
+        mkdir outputs/production
         echo ls -l  `ls -l `
 
-    # - name: Run production
-    #   run: |
-    #     docker run -v $(pwd):/mnt/vol -w /home/cmsusr gitlab-registry.cern.ch/cms-cloud/cmssw-docker/cmssw_10_6_30-slc7_amd64_gcc700 /bin/bash /mnt/vol/production/pfnano/pf_production.sh github && pwd && echo "Done running pf_production.sh"
-    #     ls
-    #     echo 'Hello World' > outputs/hello_world.txt
-    #     echo ls 1
-    #     ls outputs/
-    #     cp output.root outputs/
-    
     - name: Run production
       run: |
-        docker run -v $(pwd):/mnt/vol -w /home/cmsusr gitlab-registry.cern.ch/cms-cloud/cmssw-docker/cmssw_10_6_30-slc7_amd64_gcc700 /bin/bash /mnt/vol/production/pfnano/pf_production.sh github && pwd && echo "Done running pf_production.sh"
-        ls
-        echo 'Hello World' > outputs/hello_world.txt
-        echo ls 1
-        ls outputs/
-        cp output.root outputs/
+        docker run -v $(pwd):/mnt/vol -w /home/cmsusr gitlab-registry.cern.ch/cms-cloud/cmssw-docker/cmssw_10_6_30-slc7_amd64_gcc700 /bin/bash /mnt/vol/production/pfnano/pf_production.sh github && echo "Done running pf_production.sh"
+        cp output.root outputs/production/
     
     - name: Upload results
       uses: actions/upload-artifact@v3

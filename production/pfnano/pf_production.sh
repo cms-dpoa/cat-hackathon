@@ -11,10 +11,7 @@ set -e
 # if [ $runas = github ]
 # then
    sudo chown $USER /mnt/vol
-   echo mount volume
-   cp /mnt/vol/data/doubleeg_nanoaod_eg.root /mnt/vol/output.root
-   echo move
-   ls /mnt/vol/
+   ls -l /mnt/vol
    
    #echo At the start SITECONFIG_PATH: $SITECONFIG_PATH
    #export SITECONFIG_PATH=/mnt/vol/production/pfnano
@@ -34,13 +31,15 @@ set -e
 # git clone -b opendata https://github.com/DAZSLE/PFNano.git PhysicsTools/PFNano
 # scram b -j 4
 
-
 # cmsDriver.py --python_filename doubleeg_cfg.py --eventcontent NANOAOD --datatier NANOAOD \
 #   --fileout file:doubleeg_nanoaod.root --conditions 106X_dataRun2_v36 --step NANO \
 #   --filein $inputfile --era Run2_25ns,run2_nanoAOD_106X2015 --no_exec --data -n $nevents \
 #   --customise PhysicsTools/PFNano/pfnano_cff.PFnano_customizeData_onlyPF
 
 # cmsRun doubleeg_cfg.py
+
+# # Emulate creating root file
+cp /mnt/vol/data/doubleeg_nanoaod_eg.root /mnt/vol/output.root
 
 # if [ $runas = github ]
 # then
