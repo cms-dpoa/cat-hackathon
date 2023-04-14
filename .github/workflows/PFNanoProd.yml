@@ -27,14 +27,20 @@ jobs:
       run: |
         mkdir outputs
         echo ls -l  `ls -l `
+        echo 'Hello World' > output/hello_world.txt
 
     - name: Run production
       run: |
         docker run -v $(pwd):/mnt/vol -w /home/cmsusr gitlab-registry.cern.ch/cms-cloud/cmssw-docker/cmssw_10_6_30-slc7_amd64_gcc700 /bin/bash /mnt/vol/production/pfnano/pf_production.sh github && echo "Done running pf_production.sh"
-        cp output.root /outputs
+        ls
+        echo ls 1
+        ls /outputs/
+        cp output.root /outputs/
+        echo ls 2
+        ls /outputs/
     
     - name: Upload results
       uses: actions/upload-artifact@v3
       with:
-        name: output
+        name: Analysis Results
         path: outputs/

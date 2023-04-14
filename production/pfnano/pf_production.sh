@@ -12,8 +12,7 @@ set -e
 # then
    sudo chown $USER /mnt/vol
    echo mount volume
-   cp /mnt/vol/data/doubleeg_nanoaod_eg.root output.root
-   cp output.root /mnt/vol/
+   cp /mnt/vol/data/doubleeg_nanoaod_eg.root /mnt/vol/output.root
    echo move
    ls /mnt/vol/
    
