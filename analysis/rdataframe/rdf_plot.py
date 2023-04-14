@@ -36,9 +36,6 @@ label.SetTextAlign(31)
 # Save plot
 c.SaveAs("PFCands_pt.png")
 
-# Print cut-flow report
-report.Print()
-
 # Book histogram of dimuon mass spectrum
 bins = 200 # Number of bins in the histogram
 low = 10 # Lower edge of the histogram
@@ -67,5 +64,3 @@ label.SetTextAlign(31)
 
 # Save plot
 c.SaveAs("nPFCands.png")
-# Print cut-flow report
-report.Print()
