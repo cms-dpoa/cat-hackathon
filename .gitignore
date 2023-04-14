@@ -18,3 +18,10 @@ workflows/PFCands_plotting/dpoa/tasks/__pycache__
 workflows/PFCands_plotting/.DS_Store
 workflows/PFCands_plotting/dpoa/.DS_Store
 workflows/law-dpoa-example/dpoa/.DS_Store
+.github/Analysis Results.zip
+workflows/PFNanoProd/.law
+workflows/PFNanoProd/data
+workflows/PFNanoProd/dpoa/__pycache__
+workflows/PFNanoProd/dpoa/tasks/__pycache__
+workflows/PFNanoProd/.DS_Store
+workflows/PFNanoProd/dpoa/.DS_Store
