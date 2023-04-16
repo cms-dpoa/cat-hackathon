@@ -5,11 +5,13 @@ Simple test tasks.
 import law
 from dpoa.tasks.base import Task
 
+
 class Repository(Task):
     sandbox = "docker::riga/py-sci"
 
     def output(self):
         return self.local_target("cat-hackathon")
+
     def run(self):
         output = self.output()
         output.parent.touch()
@@ -26,13 +28,16 @@ class Repository(Task):
         if p != 0:
             raise Exception("command failed")
 
+
 class NanoProducer(Task):
     sandbox = "docker::gitlab-registry.cern.ch/cms-cloud/cmssw-docker/cmssw_10_6_30-slc7_amd64_gcc700"
-    
+
     def requires(self):
-            return Repository.req(self)
+        return Repository.req(self)
+
     def output(self):
-            return self.local_target("nanoProducer_output")
+        return self.local_target("nanoProducer_output")
+
     def run(self):
         output = self.output()
         output.parent.touch()
@@ -51,13 +56,16 @@ class NanoProducer(Task):
         if p != 0:
             raise Exception("command failed")
 
+
 class CoffeaPlotting(Task):
     sandbox = "docker::coffeateam/coffea-base:latest"
 
     def requires(self):
         return Repository.req(self)
+
     def output(self):
         return self.local_target("coffea_output")
+
     def run(self):
         output = self.output()
         output.parent.touch()
@@ -76,13 +84,16 @@ class CoffeaPlotting(Task):
         if p != 0:
             raise Exception("command failed")
 
+
 class RDFPlotting(Task):
     sandbox = "docker::rootproject/root:latest"
 
     def requires(self):
         return Repository.req(self)
+
     def output(self):
         return self.local_target("rdataframe_output")
+
     def run(self):
         output = self.output()
         output.parent.touch()
@@ -100,23 +111,26 @@ class RDFPlotting(Task):
         if p != 0:
             raise Exception("command failed")
 
+
 class Final(Task):
     sandbox = "docker::riga/py-sci"
 
     def requires(self):
         return [RDFPlotting.req(self), CoffeaPlotting.req(self), NanoProducer.req(self)]
+
     def output(self):
         return self.local_target("some_fake_file.txt")
+
     def run(self):
         output = self.output()
         output.parent.touch()
 
         cmd = f"echo 'Hello!' > {output.basename};echo 'World!' >> {output.basename}"
         p, _, _ = law.util.interruptable_popen(
-			cmd,
-			shell=True,
-			executable="/bin/bash",
-			cwd=output.parent.path,
-		)
+            cmd,
+            shell=True,
+            executable="/bin/bash",
+            cwd=output.parent.path,
+        )
         if p != 0:
             raise Exception("command failed")
