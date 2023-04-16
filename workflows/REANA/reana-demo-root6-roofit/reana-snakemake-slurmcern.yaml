@@ -1,0 +1,15 @@
+version: 0.8.0
+inputs:
+  files:
+    - code/gendata.C
+    - code/fitdata.C
+  directories:
+    - workflow/snakemake
+  parameters:
+    input: workflow/snakemake/inputs.yaml
+workflow:
+  type: snakemake
+  file: workflow/snakemake/Snakefile-slurmcern
+outputs:
+  files:
+    - results/plot.png
