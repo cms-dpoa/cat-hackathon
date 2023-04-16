@@ -57,4 +57,10 @@ git checkout -b <yourname-nextbranchname>
 
 
 
+Contributors
+============
 
+The list of contributors in alphabetical order:
+
+- `Kati Lassila-Perini`
+- `Xavier Tintin`
