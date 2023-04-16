@@ -1,0 +1,15 @@
+version: 0.3.0
+inputs:
+  files:
+    - code/helloworld.py
+    - data/names.txt
+  directories:
+    - workflow/cwl
+  parameters:
+    input: workflow/cwl/helloworld-job.yml
+workflow:
+  type: cwl
+  file: workflow/cwl/helloworld.cwl
+outputs:
+  files:
+   - outputs/greetings.txt
