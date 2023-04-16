@@ -1,0 +1,34 @@
+# Note that if you are working on the analysis development locally, i.e. outside
+# of the REANA platform, you can proceed as follows:
+#
+#   $ mkdir snakemake-local-run
+#   $ cd snakemake-local-run
+#   $ virtualenv ~/.virtualenvs/helloworld-snakemake
+#   $ source ~/.virtualenvs/helloworld-snakemake/bin/activate
+#   $ pip install snakemake
+#   $ cp -a ../code ../data .
+#   $ snakemake -s ../workflow/snakemake/Snakefile \
+#               --configfile ../workflow/snakemake/inputs.yaml -p --cores 1
+#   $ cat results/greetings.txt
+#   Hello Jane Doe!
+#   Hello Joe Bloggs!
+
+rule all:
+    input:
+        "results/greetings.txt"
+
+rule helloworld:
+    input:
+        helloworld=config["helloworld"],
+        inputfile=config["inputfile"],
+    params:
+        sleeptime=config["sleeptime"]
+    output:
+        "results/greetings.txt"
+    container:
+        "docker://python:2.7-slim"
+    shell:
+        "python {input.helloworld} "
+        "--inputfile {input.inputfile} "
+        "--outputfile {output} "
+        "--sleeptime {params.sleeptime}"

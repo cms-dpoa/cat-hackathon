@@ -1,0 +1,120 @@
+# This file is part of REANA.
+# Copyright (C) 2020, 2021 CERN.
+#
+# REANA is free software; you can redistribute it and/or modify it
+# under the terms of the MIT License; see LICENSE file for more details.
+
+name: CI
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 7 * * 1'
+
+jobs:
+  cwl-validate:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Validate CWL spec
+        uses: reanahub/reana-github-actions/local-validate@v1
+        with:
+          reana_specs: reana-cwl*.yaml
+
+  cwl-local-run:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Run CWL locally
+        uses: reanahub/reana-github-actions/local-run@v1
+        with:
+          commands: |
+            rm -rf cwl-local-run && mkdir -p cwl-local-run && cd cwl-local-run
+            pip install cwltool
+            cp -a ../code ../data . && cp ../workflow/cwl/helloworld-job.yml .
+            cwltool --quiet --outdir="./results" ../workflow/cwl/helloworld.cwl helloworld-job.yml
+            grep -q 'Hello Joe Bloggs!' results/greetings.txt
+            cd .. && rm -rf cwl-local-run
+
+  serial-validate:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Validate serial spec
+        uses: reanahub/reana-github-actions/local-validate@v1
+        with:
+          reana_specs: reana.yaml reana-htcondorcern.yaml reana-slurmcern.yaml
+
+  serial-local-run:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Run Serial locally
+        uses: reanahub/reana-github-actions/local-run@v1
+        with:
+          commands: |
+            rm -rf results && mkdir results
+            docker run -i --rm -v `pwd`/code:/code -v `pwd`/data:/data -v `pwd`/results:/results python:2.7-slim python /code/helloworld.py --sleeptime 0
+            grep -q 'Hello Joe Bloggs!' results/greetings.txt
+            rm -rf results
+
+  snakemake-validate:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Validate Snakemake spec
+        uses: reanahub/reana-github-actions/local-validate@v1
+        with:
+          reana_specs: reana-snakemake*.yaml
+
+  snakemake-local-run:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Run Snakemake locally
+        uses: reanahub/reana-github-actions/local-run@v1
+        with:
+          commands: |
+            rm -rf snakemake-local-run && mkdir -p snakemake-local-run && cd snakemake-local-run
+            pip install snakemake
+            cp -a ../code ../data .
+            snakemake -s ../workflow/snakemake/Snakefile --configfile ../workflow/snakemake/inputs.yaml -p --cores 1
+            grep -q 'Hello Joe Bloggs!' results/greetings.txt
+            cd .. && rm -rf snakemake-local-run
+
+  yadage-validate:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Validate Yadage spec
+        uses: reanahub/reana-github-actions/local-validate@v1
+        with:
+          reana_specs: reana-yadage*.yaml
+
+  yadage-local-run:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Run Yadage locally
+        uses: reanahub/reana-github-actions/local-run@v1
+        with:
+          commands: |
+            rm -rf yadage-local-run/yadage-inputs && mkdir -p yadage-local-run/yadage-inputs && cd yadage-local-run
+            pip install yadage
+            cp -a ../code ../data yadage-inputs
+            yadage-run . ../workflow/yadage/workflow.yaml -p sleeptime=0 -p inputfile=data/names.txt -p helloworld=code/helloworld.py -d initdir=`pwd`/yadage-inputs
+            grep -q 'Hello Joe Bloggs!' helloworld/greetings.txt
+            cd .. && rm -rf yadage-local-run
