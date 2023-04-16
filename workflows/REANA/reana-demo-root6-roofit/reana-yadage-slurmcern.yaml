@@ -1,0 +1,17 @@
+version: 0.6.0
+inputs:
+  files:
+    - code/gendata.C
+    - code/fitdata.C
+  directories:
+    - workflow/yadage
+  parameters:
+    events: 20000
+    gendata: code/gendata.C
+    fitdata: code/fitdata.C
+workflow:
+  type: yadage
+  file: workflow/yadage/workflow-slurmcern.yaml
+outputs:
+  files:
+    - fitdata/plot.png

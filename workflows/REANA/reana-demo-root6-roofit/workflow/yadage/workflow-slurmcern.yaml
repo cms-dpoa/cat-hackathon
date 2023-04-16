@@ -1,0 +1,59 @@
+# Note that if you are working on the analysis development locally, i.e. outside
+# of the REANA platform, you can proceed as follows:
+#
+#   $ cd reana-demo-root6-roofit
+#   $ mkdir -p yadage-local-run/yadage-inputs
+#   $ cd yadage-local-run
+#   $ cp -a ../code yadage-inputs
+#   $ yadage-run . ../workflow/yadage/workflow.yaml \
+#        -p events=20000 \
+#        -p gendata=code/gendata.C \
+#        -p fitdata=code/fitdata.C \
+#        -d initdir=`pwd`/yadage-inputs
+#   $ firefox fitdata/plot.png
+
+stages:
+  - name: gendata
+    dependencies: [init]
+    scheduler:
+      scheduler_type: 'singlestep-stage'
+      parameters:
+        events: {step: init, output: events}
+        gendata: {step: init, output: gendata}
+        outfilename: '{workdir}/data.root'
+      step:
+        process:
+          process_type: 'interpolated-script-cmd'
+          script: root -b -q '{gendata}({events},"{outfilename}")'
+        publisher:
+          publisher_type: 'frompar-pub'
+          outputmap:
+            data: outfilename
+        environment:
+          environment_type: 'docker-encapsulated'
+          image: 'reanahub/reana-env-root6'
+          imagetag: '6.18.04'
+          resources:
+            - compute_backend: slurmcern
+  - name: fitdata
+    dependencies: [gendata]
+    scheduler:
+      scheduler_type: 'singlestep-stage'
+      parameters:
+        fitdata: {step: init, output: fitdata}
+        data: {step: gendata, output: data}
+        outfile: '{workdir}/plot.png'
+      step:
+        process:
+          process_type: 'interpolated-script-cmd'
+          script: root -b -q '{fitdata}("{data}","{outfile}")'
+        publisher:
+          publisher_type: 'frompar-pub'
+          outputmap:
+            plot: outfile
+        environment:
+          environment_type: 'docker-encapsulated'
+          image: 'reanahub/reana-env-root6'
+          imagetag: '6.18.04'
+          resources:
+            - compute_backend: slurmcern

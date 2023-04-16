@@ -1,0 +1,15 @@
+version: 0.6.0
+inputs:
+  files:
+    - code/gendata.C
+    - code/fitdata.C
+  directories:
+    - workflow/cwl
+  parameters:
+    input: workflow/cwl/input.yml
+workflow:
+  type: cwl
+  file: workflow/cwl/workflow-slurmcern.cwl
+outputs:
+  files:
+    - outputs/plot.png

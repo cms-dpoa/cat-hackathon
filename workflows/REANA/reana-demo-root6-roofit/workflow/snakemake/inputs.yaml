@@ -1,0 +1,3 @@
+events: 20000
+fitdata: code/fitdata.C
+gendata: code/gendata.C

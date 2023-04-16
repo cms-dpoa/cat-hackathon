@@ -26,3 +26,5 @@ workflows/law/PFNanoProd/dpoa/tasks/__pycache__
 workflows/law/PFNanoProd/.DS_Store
 workflows/law/PFNanoProd/dpoa/.DS_Store
 workflows/law/REANA/.DS_Store
+workflows/REANA/.DS_Store
+workflows/REANA/reana-demo-root6-roofit/workflow/.DS_Store

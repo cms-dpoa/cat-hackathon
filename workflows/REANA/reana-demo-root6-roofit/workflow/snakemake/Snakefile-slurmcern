@@ -1,0 +1,31 @@
+rule all:
+    input:
+        "results/data.root",
+        "results/plot.png"
+
+rule gendata:
+    input:
+        gendata_tool=config["gendata"]
+    output:
+        "results/data.root"
+    params:
+        events=config["events"]
+    container:
+        "docker://reanahub/reana-env-root6:6.18.04"
+    resources:
+        compute_backend="slurmcern"
+    shell:
+        "mkdir -p results && root -b -q '{input.gendata_tool}({params.events},\"{output}\")'"
+
+rule fitdata:
+    input:
+        fitdata_tool=config["fitdata"],
+        data="results/data.root"
+    output:
+        "results/plot.png"
+    container:
+        "docker://reanahub/reana-env-root6:6.18.04"
+    resources:
+        compute_backend="slurmcern"
+    shell:
+        "root -b -q '{input.fitdata_tool}(\"{input.data}\",\"{output}\")'"

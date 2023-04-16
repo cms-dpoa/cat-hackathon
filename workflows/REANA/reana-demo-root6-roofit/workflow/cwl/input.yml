@@ -1,0 +1,7 @@
+events: 20000
+fitdata_tool:
+  class: File
+  path: code/fitdata.C
+gendata_tool:
+  class: File
+  path: code/gendata.C
