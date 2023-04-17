@@ -1,0 +1,25 @@
+version: 0.3.0
+inputs:
+  files:
+    - code/helloworld.py
+    - data/names.txt
+  parameters:
+    helloworld: code/helloworld.py
+    inputfile: data/names.txt
+    outputfile: results/greetings.txt
+    sleeptime: 0
+workflow:
+  type: serial
+  specification:
+    steps:
+      - name: reana_demo_helloworld_slurmcern
+        environment: 'python:2.7-slim'
+        compute_backend: slurmcern
+        commands:
+            - python "${helloworld}"
+                --inputfile "${inputfile}"
+                --outputfile "${outputfile}"
+                --sleeptime ${sleeptime}
+outputs:
+  files:
+   - results/greetings.txt
