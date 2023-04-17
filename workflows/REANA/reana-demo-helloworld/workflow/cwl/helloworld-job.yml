@@ -1,7 +1,0 @@
-sleeptime: 0
-helloworld:
-  class: File
-  location: code/helloworld.py
-inputfile:
-  class: File
-  location: data/names.txt
