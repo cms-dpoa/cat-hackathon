@@ -1,14 +1,16 @@
-version: 0.3.0
-inputs: {}
+version: 0.6.0
+inputs:
+  files:
+    - data/names.txt
+  parameters:
+    outputfile: outputfile.txt
 workflow:
   type: serial
   specification:
     steps:
-      - name: create-greetings
-        environment: 'busybox:1.33'
-        kubernetes_memory_limit: '256Mi'
+      - environment: 'python:2.7-slim'
         commands:
-          - mkdir -p results && echo "Hello, world!" >> results/greetings.txt
+          - echo "Hello, World!" >> ${outputfile}
 outputs:
   files:
-   - results/greetings.txt
+   - results/outputfile.txt
