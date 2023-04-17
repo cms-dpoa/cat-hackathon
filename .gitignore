@@ -11,6 +11,12 @@ workflows/law/law-dpoa-example/dpoa/tasks/__pycache__
 workflows/law/law-dpoa-example/.law
 workflows/law/law-dpoa-example/data
 workflows/law/law-dpoa-example/.DS_Store
+workflows/law/helloworld/.law
+workflows/law/helloworld/data
+workflows/law/helloworld/dpoa/__pycache__
+workflows/law/helloworld/dpoa/tasks/__pycache__
+workflows/law/helloworld/.DS_Store
+workflows/law/helloworld/dpoa/.DS_Store
 workflows/law/PFCands_plotting/.law
 workflows/law/PFCands_plotting/data
 workflows/law/PFCands_plotting/dpoa/__pycache__
@@ -35,3 +41,4 @@ workflows/REANA/reana-demo-helloworld/.DS_Store
 workflows/REANA/reana-demo-helloworld/workflow/.DS_Store
 workflows/REANA/PFCands_plotting/workflow/.DS_Store
 workflows/Law/.DS_Store
+workflows/Law/Hello World/.DS_Store
