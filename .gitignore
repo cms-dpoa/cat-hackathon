@@ -28,3 +28,9 @@ workflows/law/PFNanoProd/dpoa/.DS_Store
 workflows/law/REANA/.DS_Store
 workflows/REANA/.DS_Store
 workflows/REANA/reana-demo-root6-roofit/workflow/.DS_Store
+workflows/REANA/reana-demo-root6-roofit/.DS_Store
+workflows/REANA/PFCands_plotting/.DS_Store
+workflows/REANA/reana-demo-helloworld/.DS_Store
+.gitignore
+workflows/REANA/reana-demo-helloworld/workflow/.DS_Store
+workflows/REANA/PFCands_plotting/workflow/.DS_Store
