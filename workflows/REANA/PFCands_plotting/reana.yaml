@@ -8,9 +8,10 @@ workflow:
   type: serial
   specification:
     steps:
-      - environment: 'python:2.7-slim'
+      - environment: 'riga/py-sci'
         commands:
-          - echo "Hello, World!" >> ${outputfile}
+          - mkdir results/
+          - echo "Hello, World!" >> results/${outputfile}
 outputs:
   files:
    - results/outputfile.txt
