@@ -1,23 +1,23 @@
 
 # DPOA Example
 
-## Setup
+This example demonstrates the concept of [workflows](http://law.readthedocs.io/en/latest/workflows.html) and data flow
 
 Resources: [luigi](http://luigi.readthedocs.io/en/stable), [law](http://law.readthedocs.io/en/latest)
 
-To setup the repository, call:
+There are multiple ways to setup and run this example:
 
-```bash
-source setup.sh
+In this example we will run this locally:
+
 ```
+source setup.sh
+``` 
 
-When executed for the first time, this will create a minimal virtual environment with law and its dependencies.
-
-## Start tasks
-
-Currently, there are only two dummy tasks that do nothing but to create empty output files.
-
-However, the tasks already depend on each other and declare custom docker images as so-called *sandboxes* in which they should be executed.
+Requirements:
+- Have luigi installed : `pip3 install luigi`
+- Have law installed: `pip3 install law`
+- Have docker installed locally
+- Have the desired images installed locally `docker image pull riga/py-sci:latest`
 
 #### 1. Let law index your the tasks and their parameters (for autocompletion)
 
@@ -27,216 +27,222 @@ law index --verbose
 
 You should see:
 
-```output
+```shell
 indexing tasks in 1 module(s)
 loading module 'dpoa.tasks', done
 
-module 'dpoa.tasks.test', 5 task(s):
-    - NanoProducer
-    - Repository
-    - CoffeaPlotting
-    - RDFPlotting
+module 'dpoa.tasks.test', 2 task(s):
+    - First
     - Final
 
-written 5 task(s) to index file '/law-dpoa-example-main/.law/index'
+written 2 task(s) to index file '/Users/alextintin/Cernbox/DPOA/cat-hackathon/workflows/Law/HelloWorld/.law/index'
 ```
 
-#### 2. Check the status of the CreatePlots task
+You will see both tasks that are created in our `/HelloWorld/dpoa/tasks/test.py
+
+It's important to keep in mind that you have the flexibility to run any task you want, however, it's also important to note that when running a specific task, only that task and its dependent tasks will be executed. 
+
+So, while you have the option to run any task independently, you should be aware that its dependencies will not be executed unless you **explicitly** specify them in the python file.
+
+#### 2. Check the status of the Final task
 
 ```shell
 law run Final --print-status -1
 ```
 
-No tasks ran so far, so no output target should exist yet. You will see this output:
+No tasks ran so far, so no output target should exist yet. You will get this output:
 
-```output
+```shell
 print task status with max_depth -1 and target_depth 0
 
 0 > Final()
-│     LocalFileTarget(fs=local_fs, path=$DPOA_STORE_DIR/Final/some_fake_file.txt)
+│     LocalFileTarget(fs=local_fs, path=$DPOA_STORE_DIR/Final/directory)
 │       absent
 │
-├──1 > RDFPlotting()
-│  │     LocalFileTarget(fs=local_fs, path=$DPOA_STORE_DIR/RDFPlotting/rdataframe_output)
-│  │       absent
-│  │
-│  └──2 > Repository()
-│           LocalFileTarget(fs=local_fs, path=$DPOA_STORE_DIR/Repository/cat-hackathon)
-│             absent
-│
-└──1 > CoffeaPlotting()
-   │     LocalFileTarget(fs=local_fs, path=$DPOA_STORE_DIR/CoffeaPlotting/coffea_output)
-   │       absent
-   │
-   └──2 > Repository()
-            LocalFileTarget(fs=local_fs, path=$DPOA_STORE_DIR/Repository/cat-hackathon)
-              absent
+└──1 > First()
+         LocalFileTarget(fs=local_fs, path=$DPOA_STORE_DIR/First/some_fake_file.txt)
+           absent
 ```
 
-#### 3. Run the CreatePlots task
+Notice that the `Final` task depends on the First `task`, this was defined in the python file as so:
 
-To trigger the *second* task, run:
+```python
+class Final(Task):
+sandbox = "docker::riga/py-sci"
+	
+	def requires(self):
+		return First.req(self) # <- here
+```
+
+It is possible to declare various dependencies as so:
+
+```python
+class Final(Task):
+sandbox = "docker::riga/py-sci"
+	
+	def requires(self):
+		return [First.req(self), otherDependency.req(self)] # <- here
+```
+
+
+#### 3. Run the Final task
 
 ```shell
-law run CreatePlots
+law run Final
 ```
 
-This will reference you local docker, so it must be up and running.
+This should take only a few seconds to process.
 
-```output
-===== Luigi Execution Summary =====
-
-Scheduled 4 tasks of which:
-* 4 ran successfully:
-    - 1 CoffeaPlotting(...)
-    - 1 Final(...)
-    - 1 RDFPlotting(...)
-    - 1 Repository(...)
-
-This progress looks :) because there were no failed tasks or missing dependencies
-
-===== Luigi Execution Summary =====
-```
-
-By default, this example uses a local scheduler, which - by definition - offers no visualization tools in the browser. If you want to see how the task tree is built and subsequently run ``luigid`` in a second terminal. This will start a central scheduler at [localhost:8080](localhost:8080) (the default address). To inform tasks (or rather *workers*) about the scheduler, either add ``--local-scheduler False`` to the ``law run`` command as such:
+#### 3. Check the status again
 
 ```shell
-law run Final --local-scheduler False
-```
-
-or set the ``local-scheduler`` value in the ``[luigi_core]`` config section in the ``law.cfg`` file to ``False``.
-
-The task tree should look like this in the scheduler app:
-
-FIXME
-
-#### 4. Check the status again
-
-```shell
-law run Final --print-status -1
+law run Final --print-status 1
 ```
 
 When step 2 succeeded, all output targets should exist:
 
-```output
-print task status with max_depth -1 and target_depth 0
+```shell
+print task status with max_depth 1 and target_depth 0
 
 0 > Final()
-│     LocalFileTarget(fs=local_fs, path=$DPOA_STORE_DIR/Final/some_fake_file.txt)
+│     LocalFileTarget(fs=local_fs, path=$DPOA_STORE_DIR/Final/directory)
 │       existent
 │
-├──1 > RDFPlotting()
-│  │     LocalFileTarget(fs=local_fs, path=$DPOA_STORE_DIR/RDFPlotting/rdataframe_output)
-│  │       existent
-│  │
-│  └──2 > Repository()
-│           LocalFileTarget(fs=local_fs, path=$DPOA_STORE_DIR/Repository/cat-hackathon)
-│             existent
-│
-└──1 > CoffeaPlotting()
-   │     LocalFileTarget(fs=local_fs, path=$DPOA_STORE_DIR/CoffeaPlotting/coffea_output)
-   │       existent
-   │
-   └──2 > Repository()
-            LocalFileTarget(fs=local_fs, path=$DPOA_STORE_DIR/Repository/cat-hackathon)
-              existent
+└──1 > First()
+         LocalFileTarget(fs=local_fs, path=$DPOA_STORE_DIR/First/some_fake_file.txt)
+           existent
 ```
 
-To see the status of the targets in the collection, i.e., the grouped outputs of the branch tasks,
-set the target depth via `--print-status 1,1`.
+To see the status of the targets in the collection, i.e., the grouped outputs of the branch tasks, set the target depth via `--print-status 1,1`.
 
-#### 5. Look at the results
+#### 4. Look at the results
 
 ```shell
 cd data/store
+ls
 ```
 
-You will have created the following tree in your directory:
+Given the declarations in our workflow, we have the following tree:
+
+```python
+store
+├── Final
+│   └── directory
+│       └── some_fake_file.txt
+└── First
+    └── some_fake_file.txt
+
+4 directories, 2 files
+```
+
+This workflow consists of two tasks: `First` and `Final`. The purpose of `First` task is to create a file called `some_fake_file.txt` and write "Hello!" and "World!" in it. The purpose of the `Final` task is to create a directory called `directory` and copy `some_fake_file.txt` into it.
+
+#### 5. Cleanup the results
+
+You can delete the results in levels of depth (the depth depends on the declarations of the dependencies).
+
+These results can be defined as:
+
+- Files (txt; py; root; etc)
+
+```python
+def output(self):
+	return self.local_target("some_fake_file.txt")
+```
+
+- Directories
+
+```python
+def output(self):
+	return self.local_target("directory")
+```
+
+
+## Example
+Delete the outputs of our workflow in depth 0
+
+Check the tasks of our workflow in depth 0:
+
+```shell
+law run Final --print-status 0
+```
+
+Expected output:
 
 ```output
-store
-├── CoffeaPlotting
-│   └── coffea_output
-│       ├── PF_n.png
-│       ├── PF_n.txt
-│       └── PF_pt.png
-├── Final
-│   └── some_fake_file.txt
-├── RDFPlotting
-│   └── rdataframe_output
-│       └── PFCands_pt.png
-└── Repository
-    └── cat-hackathon
-        ├── README.md
-        ├── analysis
-        │   ├── coffea
-        │   │   ├── README.md
-        │   │   └── coffea_plot.py
-        │   └── rdataframe
-        │       ├── README.md
-        │       └── rdf_plot.py
-        ├── data
-        │   └── doubleeg_nanoaod_eg.root
-        ├── production
-        │   └── pfnano
-        │       ├── README.md
-        │       └── pf_production.sh
-        └── workflows
-            ├── PFCands_plotting
-            │   ├── LICENSE
-            │   ├── README.md
-            │   ├── dpoa
-            │   │   ├── __init__.py
-            │   │   └── tasks
-            │   │       ├── __init__.py
-            │   │       ├── base.py
-            │   │       └── test.py
-            │   ├── law.cfg
-            │   └── setup.sh
-            └── law-dpoa-example
-                ├── LICENSE
-                ├── README.md
-                ├── dpoa
-                │   ├── __init__.py
-                │   └── tasks
-                │       ├── __init__.py
-                │       ├── base.py
-                │       └── test.py
-                ├── law.cfg
-                └── setup.sh
+print task status with max_depth 0 and target_depth 0
 
-21 directories, 29 files
+0 > Final()
+      LocalFileTarget(fs=local_fs, path=$DPOA_STORE_DIR/Final/directory)
+        existent
 ```
 
-#### 6. Cleanup the results
+Our `Final` task exists here, for this task has no declared dependencies. 
+
+Since the output is specified to be a directory, when deleting in depth 0, we will delete all the files contained in this directory. This is very convenient when working with various files and sub directories. Let's see for ourselves:
+
+```shell 
+law run Final --remove-output 0
+```
+
+```output
+remove task output with max_depth 0
+removal mode? [i*(interactive), d(dry), a(all)]
+```
+
+We select the option `a` and hit enter.
+
+```
+selected all mode
+
+0 > Final()
+      LocalFileTarget(fs=local_fs, path=$DPOA_STORE_DIR/Final/directory)
+        removed
+```
+
+Let's check the tree:
+
+```python
+store
+├── Final
+└── First
+    └── some_fake_file.txt
+
+3 directories, 1 file
+```
+
+We successfully deleted all the files in our Final folder (depth 0), now we can delete files as pleased. 
+
+To delete all the files created in a workflow, use the argument `-1` as such:
 
 ```shell
 law run Final --remove-output -1
 ```
 
-You should see:
+You have deleted all your workflow files sucessfully!
 
-```shell
+Expected output:
+
+```output
 remove task output with max_depth -1
 removal mode? [i*(interactive), d(dry), a(all)] a
 selected all mode
 
 0 > Final()
-│     LocalFileTarget(fs=local_fs, path=$DPOA_STORE_DIR/Final/some_fake_file.txt)
+│     LocalFileTarget(fs=local_fs, path=$DPOA_STORE_DIR/Final/directory)
 │       removed
 │
-├──1 > RDFPlotting()
-│  │     LocalFileTarget(fs=local_fs, path=$DPOA_STORE_DIR/RDFPlotting/rdataframe_output)
-│  │       removed
-│  │
-│  └──2 > Repository()
-│           LocalFileTarget(fs=local_fs, path=$DPOA_STORE_DIR/Repository/cat-hackathon)
-│             removed
-│
-└──1 > CoffeaPlotting()
-   │     LocalFileTarget(fs=local_fs, path=$DPOA_STORE_DIR/CoffeaPlotting/coffea_output)
-   │       removed
-   │
-   └──2 > Repository()
-            already handled
+└──1 > First()
+         LocalFileTarget(fs=local_fs, path=$DPOA_STORE_DIR/First/some_fake_file.txt)
+           removed
+```
+
+Expected final tree:
+
+```python
+store
+├── Final
+└── First
+
+3 directories, 0 files
 ```
