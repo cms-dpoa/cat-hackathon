@@ -1,17 +1,32 @@
 version: 0.6.0
 inputs:
   files:
-    - data/names.txt
-  parameters:
-    outputfile: outputfile.txt
+    - data/doubleeg_nanoaod_eg.root
+    - data/coffea_plot.py
+    - data/rdf_plot.py
 workflow:
   type: serial
   specification:
     steps:
-      - environment: 'riga/py-sci'
+      - name: coffea-plot
+        environment: "coffeateam/coffea-base:latest"
         commands:
-          - mkdir results/
-          - echo "Hello, World!" >> results/${outputfile}
+          - mkdir -p results/coffea_output/
+          - cp data/coffea_plot.py ./
+          - python coffea_plot.py
+          - mv *.png results/coffea_output/
+          - mv *.txt results/coffea_output/
+      - name: rdf-plot
+        environment: "rootproject/root"
+        commands:
+          - mkdir -p results/rdf_output/
+          - cp data/rdf_plot.py ./
+          - python rdf_plot.py
+          - mv *.png results/rdf_output/
 outputs:
   files:
-   - results/outputfile.txt
+    - results/coffea_output/PF_pt.png
+    - results/coffea_output/PF_n.png
+    - results/coffea_output/PF_n.txt
+    - results/rdf_output/nPFCands.png
+    - results/rdf_output/PFCands_pt.png
