@@ -5,118 +5,72 @@ Simple test tasks.
 import law
 from dpoa.tasks.base import Task
 
-class Repository(Task):
+
+class First(Task):
+    # Define the Docker image to be used for the task
+    # Docker must be running locally
+    # Using `riga/py-sci` image from docker (Must be installed locally)
     sandbox = "docker::riga/py-sci"
 
+    # Define the output for the task
+    # Can be a file or folder (this case a file)
     def output(self):
-        return self.local_target("cat-hackathon")
+        return self.local_target("some_fake_file.txt")
+
+    # Define the logic for running the task
     def run(self):
+        # Get the output target
         output = self.output()
+        # Create the parent directory of the output target if it doesn't exist
         output.parent.touch()
 
-        # Download repository
-        github = "https://github.com/cms-dpoa/cat-hackathon.git"
-        cmd = f"git clone {github};"
-        p, _, _ = law.util.interruptable_popen(
-            cmd,
-            shell=True,
-            executable="/bin/bash",
-            cwd=output.parent.path
-        )
-        if p != 0:
-            raise Exception("command failed")
-
-class NanoProducer(Task):
-    sandbox = "docker::gitlab-registry.cern.ch/cms-cloud/cmssw-docker/cmssw_10_6_30-slc7_amd64_gcc700"
-    
-    def requires(self):
-            return Repository.req(self)
-    def output(self):
-            return self.local_target("nanoProducer_output")
-    def run(self):
-        output = self.output()
-        output.parent.touch()
-
-        cmd = f"ls ../;"\
-            "echo here"\
-            "cd /home/cmsusr;"\
-            "echo ls;"\
-            "ls;"
+        # Define the shell command to be executed
+        cmd = f"echo 'Hello!' >> some_fake_file.txt;"\
+            "echo 'World!' >> some_fake_file.txt;"
+        
+        # Execute the shell command in the output directory
         p, _, _ = law.util.interruptable_popen(
             cmd,
             shell=True,
             executable="/bin/bash",
             cwd=output.parent.path,
         )
-        if p != 0:
-            raise Exception("command failed")
 
-class CoffeaPlotting(Task):
-    sandbox = "docker::coffeateam/coffea-base:latest"
-
-    def requires(self):
-        return Repository.req(self)
-    def output(self):
-        return self.local_target("coffea_output")
-    def run(self):
-        output = self.output()
-        output.parent.touch()
-
-        cmd = f"mkdir coffea_output;"\
-            "cd ../Repository/cat-hackathon/analysis/coffea/;"\
-            "python coffea_plot.py;"\
-            "mv *.png ../../../../CoffeaPlotting/coffea_output;"\
-            "mv PF_n.txt ../../../../CoffeaPlotting/coffea_output;"
-        p, _, _ = law.util.interruptable_popen(
-            cmd,
-            shell=True,
-            executable="/bin/bash",
-            cwd=output.parent.path
-        )
-        if p != 0:
-            raise Exception("command failed")
-
-class RDFPlotting(Task):
-    sandbox = "docker::rootproject/root:latest"
-
-    def requires(self):
-        return Repository.req(self)
-    def output(self):
-        return self.local_target("rdataframe_output")
-    def run(self):
-        output = self.output()
-        output.parent.touch()
-
-        cmd = f"mkdir rdataframe_output;"\
-            "cd ../Repository/cat-hackathon/analysis/rdataframe/;"\
-            "python rdf_plot.py;"\
-            "mv *.png ../../../../RDFPlotting/rdataframe_output;"
-        p, _, _ = law.util.interruptable_popen(
-            cmd,
-            shell=True,
-            executable="/bin/bash",
-            cwd=output.parent.path
-        )
+        # Raise an exception if the command failed
         if p != 0:
             raise Exception("command failed")
 
 class Final(Task):
+    # Define the Docker image to be used for the task
+    # Docker must be running locally
+    # Using `riga/py-sci` image from docker (Must be installed locally)
     sandbox = "docker::riga/py-sci"
 
+    # Define the dependencies for the task
     def requires(self):
-        return [RDFPlotting.req(self), CoffeaPlotting.req(self), NanoProducer.req(self)]
+        return First.req(self)
+
+    # Define the output for the task (this case a directory)
     def output(self):
-        return self.local_target("some_fake_file.txt")
+        return self.local_target("directory")
+
+    # Define the logic for running the task
     def run(self):
         output = self.output()
         output.parent.touch()
 
-        cmd = f"echo 'Hello!' > {output.basename};echo 'World!' >> {output.basename}"
+        # Define the shell command to be executed
+        cmd = f"mkdir directory;"\
+            "cp ../First/some_fake_file.txt directory/;"
+        
+        # Execute the shell command in the output directory
         p, _, _ = law.util.interruptable_popen(
-			cmd,
-			shell=True,
-			executable="/bin/bash",
-			cwd=output.parent.path,
-		)
+            cmd,
+            shell=True,
+            executable="/bin/bash",
+            cwd=output.parent.path,
+        )
+        
+        # Raise an exception if the command failed
         if p != 0:
             raise Exception("command failed")

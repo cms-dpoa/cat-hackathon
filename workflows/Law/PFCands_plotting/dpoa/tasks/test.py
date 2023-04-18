@@ -26,31 +26,6 @@ class Repository(Task):
         if p != 0:
             raise Exception("command failed")
 
-class NanoProducer(Task):
-    sandbox = "docker::gitlab-registry.cern.ch/cms-cloud/cmssw-docker/cmssw_10_6_30-slc7_amd64_gcc700"
-    
-    def requires(self):
-            return Repository.req(self)
-    def output(self):
-            return self.local_target("nanoProducer_output")
-    def run(self):
-        output = self.output()
-        output.parent.touch()
-
-        cmd = f"ls ../;"\
-            "echo here"\
-            "cd /home/cmsusr;"\
-            "echo ls;"\
-            "ls;"
-        p, _, _ = law.util.interruptable_popen(
-            cmd,
-            shell=True,
-            executable="/bin/bash",
-            cwd=output.parent.path,
-        )
-        if p != 0:
-            raise Exception("command failed")
-
 class CoffeaPlotting(Task):
     sandbox = "docker::coffeateam/coffea-base:latest"
 
@@ -104,7 +79,7 @@ class Final(Task):
     sandbox = "docker::riga/py-sci"
 
     def requires(self):
-        return [RDFPlotting.req(self), CoffeaPlotting.req(self), NanoProducer.req(self)]
+        return [RDFPlotting.req(self), CoffeaPlotting.req(self)]
     def output(self):
         return self.local_target("some_fake_file.txt")
     def run(self):
