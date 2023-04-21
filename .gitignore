@@ -36,9 +36,11 @@ workflows/REANA/.DS_Store
 workflows/REANA/reana-demo-root6-roofit/workflow/.DS_Store
 workflows/REANA/reana-demo-root6-roofit/.DS_Store
 workflows/REANA/PFCands_plotting/.DS_Store
-workflows/REANA/reana-demo-helloworld/.DS_Store
+
+workflows/REANA/helloworld-serial/.DS_Store
+workflows/REANA/helloworld-serial/results
 .gitignore
-workflows/REANA/reana-demo-helloworld/workflow/.DS_Store
+workflows/REANA/helloworld-serial/workflow/.DS_Store
 workflows/REANA/PFCands_plotting/workflow/.DS_Store
 workflows/Law/.DS_Store
 workflows/Law/Hello World/.DS_Store

@@ -1,0 +1,31 @@
+version: 0.6.0
+inputs:
+  files:
+    - data/input.txt
+    - code/script1.sh
+    - code/script2.sh
+  parameters:
+    inputData: data/input.txt
+    script1: code/script1.sh
+    script2: code/script2.sh
+    output: results/outputfile.txt
+workflow:
+  type: serial
+  specification:
+    steps: 
+      - name: create
+        environment: "riga/py-sci"
+        kubernetes_memory_limit: '256Mi'
+        commands:
+          - mkdir results/
+          - chmod +x "$script1"
+          - sh "$script1" >> "$output"
+      - name: append
+        environment: "riga/py-sci"
+        kubernetes_memory_limit: '256Mi'
+        commands:
+          - chmod +x "$script2"
+          - sh "$script2" "$inputData" "$output"
+outputs:
+  files:
+    - results/outputfile.txt
