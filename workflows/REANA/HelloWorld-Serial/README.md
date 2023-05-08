@@ -73,6 +73,37 @@ helm repo add reanahub https://reanahub.github.io/reana
 helm repo update 
 helm install reana reanahub/reana --namespace reana --create-namespace --wait
 ```
+
+If you are deploying REANA for the first time, there are a few steps left to
+finalise its configuration.
+
+1. Initialise the database:
+
+```    
+kubectl -n reana exec deployment/reana-server -c rest-api -- \
+    ./scripts/create-database.sh
+```
+
+2. Create administrator user and corresponding access token:
+
+```
+mytoken=$(kubectl -n reana exec deployment/reana-server -c rest-api -- \
+	flask reana-admin create-admin-user --email john.doe@example.org \
+										--password mysecretpassword)
+```
+
+3. Store administrator access token as Kubernetes secret:
+
+```
+kubectl -n reana create secret generic reana-admin-access-token \
+	--from-literal=ADMIN_ACCESS_TOKEN="$mytoken"
+```
+
+4. Try to run your first REANA example:
+
+```
+firefox https://localhost:30443
+```
    
 3. Create REANA admin user:
 
@@ -96,21 +127,26 @@ source ~/.virtualenvs/reana/bin/activate
 pip3 install reana-client
 ```
 
-## Connect to some REANA cloud instance
+## Connect to some REANA instance
 
 Navigate to your [profile](https://localhost:30443/profile) and run:
 
 ```shell
-export REANA_SERVER_URL=https://reana.cern.ch/
+export export REANA_SERVER_URL=https://localhost:30443
 export REANA_ACCESS_TOKEN=XXXXXXX
 ```
 
 These commands set two environment variables: `REANA_SERVER_URL` and `REANA_ACCESS_TOKEN`.
 
--   `REANA_SERVER_URL` is being set to the URL of the REANA server, which is [https://reana.cern.ch/](https://reana.cern.ch/) in this case.
+-   `REANA_SERVER_URL` is being set to the URL of the REANA server
 -   `REANA_ACCESS_TOKEN` is being set to a token that provides authorization to access the REANA server. The value `XXXXXXX` is a placeholder and should be replaced with the actual access token.
 
 Setting these environment variables will allow you to use the REANA client to interact with the REANA server, such as submitting and managing workflow jobs.
+
+### Test connection to the REANA cluster
+```
+reana-client ping
+```
 
 # Create new workflow
 
@@ -277,13 +313,13 @@ reana-client delete -w HelloWorld.1 --include-all-runs
 
 If you will to know more commands, you can check out the [reana-client CLI API documentation](https://docs.reana.io/reference/reana-client-cli-api/).
 
-### Fast test
+
+# Fast test
 
 To rapidly test your workflow you can copy and run:
 
 ```shell
 reana-client create -n HelloWorld
-export REANA_WORKON=HelloWorld
 reana-client upload
 reana-client start
 ```

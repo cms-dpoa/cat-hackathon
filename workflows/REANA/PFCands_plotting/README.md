@@ -25,18 +25,17 @@ The analysis workflow is simple and consists of two above-mentioned stages:
 	 |  START  |
 	 +---------+
             |  
-            V  input: "code/script1.sh"
+            V  input: "data/"
 	 +----------------+
-	 |  (1)createDir  |
+	 | (1)coffea-plot |
 	 +----------------+
-		   |  output: "/results/outputfile.txt"
+		   |  output: "/results/coffea_output/"
 		   |  
-		   |  input: "code/script2.sh"
-		   v  input: "data/input.txt"
+		   v  input: "data/"
 	 +------------------+
-	 |  (2)navigateDir  |
+	 |   (2)rdf-plot    |
 	 +------------------+
-		   |  output:"/results/outputfile.txt"
+		   |  output:"/results/rdf_output/"
 		   v
 	 +----------+
 	 |   STOP   |
@@ -45,12 +44,14 @@ The analysis workflow is simple and consists of two above-mentioned stages:
 
 ## 5. Output results
 
-The example produces a text file with the expected output:
+The example produces a directory with the expected output files:
 
-```output
-Hello World!
-Hello from REANA!!
-```
+- results/coffea_output/PF_n.txt    
+- results/coffea_output/PF_n.png   
+- results/coffea_output/PF_pt.png  
+- results/rdf_output/PFCands_pt.png  
+- results/rdf_output/nPFCands.png  
+
 
 # Running the example
 
@@ -167,8 +168,8 @@ reana-client start
 
 Expected output:
 
-```python
-==> SUCCESS: PFCands_analysis has been queued
+```output
+==> SUCCESS: PFCands_analysis is pending
 ```
 
 ### Check its status
@@ -200,12 +201,18 @@ reana-client ls
  Expected output:
 
 ```python
-NAME                     SIZE   LAST-MODIFIED
-reana.yaml               1117   2023-04-21T01:35:26
-code/script1.sh          38     2023-04-21T01:36:10
-code/script2.sh          174    2023-04-21T01:36:10
-data/input.txt           11     2023-04-21T01:36:10
-results/outputfile.txt   32     2023-04-21T01:37:16
+NAME                                SIZE      LAST-MODIFIED      
+rdf_plot.py                         1661      2023-05-07T05:14:20
+reana.yaml                          695       2023-05-07T05:09:10
+coffea_plot.py                      1063      2023-05-07T05:12:09
+results/coffea_output/PF_n.txt      55        2023-05-07T05:12:29
+results/coffea_output/PF_n.png      13711     2023-05-07T05:12:34
+results/coffea_output/PF_pt.png     10174     2023-05-07T05:12:34
+results/rdf_output/PFCands_pt.png   8063      2023-05-07T05:14:50
+results/rdf_output/nPFCands.png     7192      2023-05-07T05:14:54
+data/rdf_plot.py                    1661      2023-05-07T05:09:34
+data/doubleeg_nanoaod_eg.root       2451479   2023-05-07T05:09:34
+data/coffea_plot.py                 1063      2023-05-07T05:09:35
 ```
 
 ### Download output results
@@ -214,34 +221,31 @@ results/outputfile.txt   32     2023-04-21T01:37:16
 reana-client download
 ```
 
-The output files that were specified in the yaml configuration file will be downloaded, in this case, our `results/outputfile.txt`.  You will downloaded a `results` directory with the following content:
+The output files that were specified in the yaml configuration file will be downloaded, in this case, our directories will be downloaded in a compressed file similar to `download_PFCands_analysis.1_results_2023-05-07-051750.zip`. Unzip it and you will see it has the following contents:
 
 ```python
 ../PFCands_plotting
 ├── LICENSE
 ├── README.md
-├── README.rst
-├── code
 ├── data
-│   ├── coffea_plot.py
-│   ├── doubleeg_nanoaod_eg.root
-│   └── rdf_plot.py
+│   ├── coffea_plot.py
+│   ├── doubleeg_nanoaod_eg.root
+│   └── rdf_plot.py
+├── download_PFCands_analysis.1_results_2023-05-07-051750.zip
 ├── reana.yaml
 └── results
     ├── coffea_output
-    │   ├── PF_n.png
-    │   ├── PF_n.txt
-    │   └── PF_pt.png
+    │   ├── PF_n.png
+    │   ├── PF_n.txt
+    │   └── PF_pt.png
     └── rdf_output
         ├── PFCands_pt.png
         └── nPFCands.png
 
-6 directories, 12 files
+5 directories, 12 files
 ```
 
 You will have created a series of plots:
-
-![[Pasted image 20230421143107.png]]
 
 Plus a text file in `results/coffea_output` called `PF_n.txt` with the following content:
 
