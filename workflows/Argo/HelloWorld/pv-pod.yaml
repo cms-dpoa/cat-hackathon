@@ -1,0 +1,24 @@
+# pv-pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: task-pv-pod
+spec:
+  volumes:
+    - name: task-pv-storage
+      persistentVolumeClaim:
+        claimName: task-pv-claim
+  containers:
+    - name: task-pv-container
+      image: busybox
+      command: ["tail", "-f", "/dev/null"]
+      volumeMounts:
+        - mountPath: /mnt/vol
+          name: task-pv-storage
+      resources:
+        limits:
+          cpu: "2"
+          memory: "3Gi"
+        requests:
+          cpu: "1"
+          memory: "512Mi"
