@@ -11,9 +11,6 @@ set -e
 if [ $runas = github ]; then
    sudo chown $USER /mnt/vol
    ls -l /mnt/vol
-#    echo At the start SITECONFIG_PATH: $SITECONFIG_PATH
-#    export SITECONFIG_PATH=/mnt/vol/production/pfnano
-#    cp -r /mnt/vol cat-hackathon
 fi
 
 if [ $runas = reana ]; then
