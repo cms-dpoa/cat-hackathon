@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: dag-
+spec:
+  entrypoint: main
+  volumes:
+    - name: workdir
+      hostPath:
+        path: /mnt/vol
+        type: DirectoryOrCreate
+  templates:
+    - name: main
+      dag:
+        tasks:
+          - name: a
+            template: whalesay1
+          - name: b
+            template: whalesay2
+            dependencies:
+              - a
+    - name: whalesay1
+      script:
+        image: alpine:latest
+        command: [sh]
+        source: |
+          rm /mnt/vol/*.txt
+          echo "Hello world" >> /mnt/vol/argo.txt
+          ls /mnt/vol
+        volumeMounts:
+        - name: workdir
+          mountPath: /mnt/vol
+
+    - name: whalesay2
+      container:
+        image: docker/whalesay
+        command: [ sh, -c ]
+        args: [ "cowsay hello world >> /mnt/vol/hello_world.txt" ]
+        volumeMounts:
+        - name: workdir
+          mountPath: /mnt/vol
