@@ -2,28 +2,20 @@ version: 0.6.0
 inputs:
   directories:
     - data
-  #   - code
-  files:
-    - codeRun/pf_production.sh
+    - codeRun
   parameters:
     pf_production: codeRun/pf_production.sh
-    working_dir: /home/cmsusr
   options:
     CACHE: off
 workflow:
   type: serial
   specification:
     steps:
-      # - name: PFCad-Production
-      #   environment: "gitlab-registry.cern.ch/cms-cloud/cmssw-docker/cmssw_10_6_30-slc7_amd64_gcc700"
-      #   commands:
-      #     - mkdir -p results/production_output/
-      #     - cd ${working_dir}
-      #     - echo ls
-      #     - ls
-      #     - echo production
-      #     - sh $pf_production reana
-      #     - cp output.root results/production_output/
+      - name: PFCad-Production
+        environment: "gitlab-registry.cern.ch/cms-cloud/cmssw-docker/cmssw_10_6_30-slc7_amd64_gcc700"
+        commands:
+          - mkdir -p results/production_output/
+          - sh codeRun/run.sh
       - name: coffea-plot
         environment: "coffeateam/coffea-base:latest"
         commands:
@@ -40,7 +32,5 @@ workflow:
           - python rdf_plot.py
           - mv *.png results/rdf_output/
 outputs:
-  files:
-    - results/production_output/output.root
   directories:
     - results
